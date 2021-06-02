@@ -1,6 +1,17 @@
-# Getting Started with Create React App
+# Todo MVP
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Goal: To build a fully-functional todo web app using React.
+
+We'll pair-program on this and work together to build this up, learning concepts as we go!
+
+Tasks:
+- [x] Set up a new CRA
+- [ ] Lay out app using HTML and CSS
+- [ ] "React-ify" components to make them reusable
+- [ ] Add ability to add new todos
+- [ ] Add ability to complete todos
+- [ ] Add ability to delete todos
+- [ ] Get creative! (sorting completed todos, saving todos in localstorage, etc.)
 
 ## Available Scripts
 
