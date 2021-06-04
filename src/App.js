@@ -27,6 +27,7 @@ const TodoItem = ({ onToggle, label, defaultCompleted }) => {
       <label className={classname} id="first">
         {label}
       </label>
+
     </div>
   );
 };
@@ -47,9 +48,23 @@ const App = () => {
     console.log("Checkbox was toggled");
   };
 
+  const [isClicked, setIsClicked] = useState(false);
+  const visibility = classnames({
+    "visible": !isClicked,
+    "hidden":isClicked
+  })
+
+  const handleAdd=() =>{
+    setIsClicked(!isClicked);
+    
+  }
+
   return (
     <div className="contatiner py-20 mx-auto max-w-md">
       <div className="bg-white rounded-lg p-10 text-black shadow">
+        <legend> Todo List</legend>
+        <button  onClick ={handleAdd} type="submit" className="p-2">Add New Item</button>
+        <input type = "text" className={visibility} />
         {todoItems.map((item) => (
           <TodoItem
             label={item.text}
