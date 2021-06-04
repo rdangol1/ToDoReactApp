@@ -5,6 +5,7 @@ Goal: To build a fully-functional todo web app using React.
 We'll pair-program on this and work together to build this up, learning concepts as we go!
 
 Tasks:
+
 - [x] Set up a new CRA
 - [ ] Lay out app using HTML and CSS
 - [ ] "React-ify" components to make them reusable
