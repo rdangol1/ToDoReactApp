@@ -1,9 +1,7 @@
-import "./App.css";
-
 const App = () => {
   return (
     <div className="contatiner py-20 mx-auto max-w-md">
-      <h1 className="text-lg text-gray-800">Hello!</h1>
+      <div className="bg-white rounded-lg p-10 text-black shadow"></div>
     </div>
   );
 };
