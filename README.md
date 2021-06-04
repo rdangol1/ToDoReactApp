@@ -7,10 +7,10 @@ We'll pair-program on this and work together to build this up, learning concepts
 Tasks:
 
 - [x] Set up a new CRA
-- [ ] Lay out app using HTML and CSS
-- [ ] "React-ify" components to make them reusable
-- [ ] Add ability to add new todos
-- [ ] Add ability to complete todos
+- [x] Lay out app using HTML and CSS
+- [x] "React-ify" components to make them reusable
+- [x] Add ability to add new todos
+- [x] Add ability to complete todos
 - [ ] Add ability to delete todos
 - [ ] Get creative! (sorting completed todos, saving todos in localstorage, etc.)
 
