@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import classnames from "classnames";
 
-const TodoItem = ({ onToggle, label, defaultCompleted }) => {
+const TodoItem = ({ key,onToggle, label, defaultCompleted, deleteItem}) => {
   /**
    * This state is used to hold if the checkbox for the todo item
    * is checked or not
@@ -35,13 +35,15 @@ const TodoItem = ({ onToggle, label, defaultCompleted }) => {
         onClick={handleClick}
         className="mr-5"
         type="checkbox"
-        id="first"
+        id={key}
         checked={isChecked}
       />
-      <label className={classname} id="first">
+      <label className={classname} id={key}>
         {label}
       </label>
-      <button className="text-red-600 float-right">Delete</button>
+      <button onClick={() => deleteItem(key)} className="text-red-600 float-right" id={key} >Delete</button>
+      
+      
     </div>
   );
 };
@@ -94,12 +96,16 @@ const App = () => {
       text: inputValue,
       defaultCompleted: false,
     };
-
     // Add the temporary todo item to the existing list of todos
     setTodoItems([...todoItems, temporaryTodoItem]);
 
     // Clear the input
     setInputValue("");
+  };
+  const deleteItem = (props) => {
+    let newlist = todoItems.filter((item) => item.props !== props);
+    setTodoItems(newlist);
+    
   };
 
   return (
@@ -121,11 +127,13 @@ const App = () => {
             +
           </button>
         </div>
-        {todoItems.map((item) => (
+        {todoItems.map((item, index) => (
           <TodoItem
+            key={index}
             label={item.text}
             defaultCompleted={item.defaultCompleted}
             onToggle={checkboxToggled}
+            deleteItem={deleteItem} 
           />
         ))}
       </div>
