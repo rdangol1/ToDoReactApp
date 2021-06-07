@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import classnames from "classnames";
 
-const TodoItem = ({ key, onToggle, label, defaultCompleted, deleteItem}) => {
-  console.log(key)
+const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted }) => {
   /**
    * This state is used to hold if the checkbox for the todo item
    * is checked or not
@@ -36,13 +35,16 @@ const TodoItem = ({ key, onToggle, label, defaultCompleted, deleteItem}) => {
         onClick={handleClick}
         className="mr-5"
         type="checkbox"
-        id={key}
+        id={id}
+        name={id}
         checked={isChecked}
       />
-      <label className={classname} id={key}>
+      <label className={classname} for={id}>
         {label}
       </label>
-      <button onClick={() => deleteItem(key)} className="text-red-600 float-right" id={key} >Delete</button>   
+      <button onClick={onDelete} className="text-red-600 float-right">
+        Delete
+      </button>
     </div>
   );
 };
@@ -101,10 +103,26 @@ const App = () => {
     // Clear the input
     setInputValue("");
   };
-  const deleteItem = (props) => {
-    const newlist = todoItems.filter((TodoItem) => TodoItem.props !== props);
-    setTodoItems(newlist);
-    
+
+  /**
+   * Check if enter
+   */
+  const handleKeyUp = (event) => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      handleAddTodo();
+    }
+  };
+
+  /**
+   * Delete item from todo list
+   */
+  const deleteItem = (indexToDelete) => {
+    const tmpTodoList = [
+      ...todoItems.slice(0, indexToDelete),
+      ...todoItems.slice(indexToDelete + 1, todoItems.length),
+    ];
+    setTodoItems(tmpTodoList);
   };
 
   return (
@@ -116,6 +134,7 @@ const App = () => {
             type="text"
             className="p-2 border-2 border-gray-200 rounded-md mr-2 flex-1"
             onChange={(event) => setInputValue(event.target.value)}
+            onKeyUp={handleKeyUp}
             value={inputValue}
           />
           <button
@@ -128,15 +147,15 @@ const App = () => {
         </div>
         {todoItems.map((item, index) => (
           <TodoItem
-            key= {index.toString()}
-            value ={index}
+            key={index}
+            id={index}
+            value={index}
             label={item.text}
             defaultCompleted={item.defaultCompleted}
             onToggle={checkboxToggled}
-            deleteItem={deleteItem} 
+            onDelete={() => deleteItem(index)}
           />
-        ))
-        }
+        ))}
       </div>
     </div>
   );
