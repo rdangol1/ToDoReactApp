@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import classnames from "classnames";
 
-const TodoItem = ({ key,onToggle, label, defaultCompleted, deleteItem}) => {
+const TodoItem = ({ key, onToggle, label, defaultCompleted, deleteItem}) => {
+  console.log(key)
   /**
    * This state is used to hold if the checkbox for the todo item
    * is checked or not
@@ -41,9 +42,7 @@ const TodoItem = ({ key,onToggle, label, defaultCompleted, deleteItem}) => {
       <label className={classname} id={key}>
         {label}
       </label>
-      <button onClick={() => deleteItem(key)} className="text-red-600 float-right" id={key} >Delete</button>
-      
-      
+      <button onClick={() => deleteItem(key)} className="text-red-600 float-right" id={key} >Delete</button>   
     </div>
   );
 };
@@ -103,7 +102,7 @@ const App = () => {
     setInputValue("");
   };
   const deleteItem = (props) => {
-    let newlist = todoItems.filter((item) => item.props !== props);
+    const newlist = todoItems.filter((TodoItem) => TodoItem.props !== props);
     setTodoItems(newlist);
     
   };
@@ -129,13 +128,15 @@ const App = () => {
         </div>
         {todoItems.map((item, index) => (
           <TodoItem
-            key={index}
+            key= {index.toString()}
+            value ={index}
             label={item.text}
             defaultCompleted={item.defaultCompleted}
             onToggle={checkboxToggled}
             deleteItem={deleteItem} 
           />
-        ))}
+        ))
+        }
       </div>
     </div>
   );
