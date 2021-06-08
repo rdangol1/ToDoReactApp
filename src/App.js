@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import classnames from "classnames";
 
-const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted }) => {
+const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted}) => {
   /**
    * This state is used to hold if the checkbox for the todo item
    * is checked or not
    */
   const [isChecked, setIsChecked] = useState(defaultCompleted);
-
+  //const [CompletedList, setCompletedList] = useState(false);
   /**
    * This function is fired when the checkbox for the todo item
    * is clicked
@@ -15,11 +15,10 @@ const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted }) => {
   const handleClick = () => {
     // Make checked state opposite its value and update the state
     setIsChecked(!isChecked);
-
+    
     // Call `onToggle` function from props
     onToggle();
   };
-
   /**
    * Classnames to conditionally be applied to the `label`
    */
@@ -28,11 +27,12 @@ const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted }) => {
     "line-through": isChecked, // If checkbox is checked
     "text-gray-300": isChecked, // If checkbox is checked
   });
-
+ 
+ 
   return (
     <div className="border-b-2 p-2">
       <input
-        onClick={handleClick}
+        onChange={handleClick}
         className="mr-5"
         type="checkbox"
         id={id}
@@ -46,6 +46,7 @@ const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted }) => {
         Delete
       </button>
     </div>
+    
   );
 };
 
@@ -72,14 +73,17 @@ const App = () => {
    * input to the "new todo" input
    */
   const [inputValue, setInputValue] = useState("");
-
+ 
   /**
    * This function is called any time a todo is checked or unchecked
    * NOTE: All this does right now is log to the console, but we
    * might do something with this down the road
    */
-  const checkboxToggled = () => {
+  const checkboxToggled = (props) => {
     console.log("A checkbox was toggled");
+    let filtered = todoItems.filter( item => item.props == true);
+    console.log(filtered);
+
   };
 
   /**
@@ -99,6 +103,7 @@ const App = () => {
     };
     // Add the temporary todo item to the existing list of todos
     setTodoItems([...todoItems, temporaryTodoItem]);
+    
 
     // Clear the input
     setInputValue("");
@@ -125,6 +130,10 @@ const App = () => {
     setTodoItems(tmpTodoList);
   };
 
+  const EditItem =(indexToEdit) =>{
+    
+  }
+
   return (
     <div className="contatiner py-20 mx-auto max-w-md">
       <div className="bg-white rounded-lg p-10 text-black shadow">
@@ -144,16 +153,20 @@ const App = () => {
           >
             +
           </button>
+          
         </div>
         {todoItems.map((item, index) => (
           <TodoItem
+
             key={index}
             id={index}
             value={index}
             label={item.text}
             defaultCompleted={item.defaultCompleted}
-            onToggle={checkboxToggled}
+            onToggle={() =>checkboxToggled()}
             onDelete={() => deleteItem(index)}
+            
+            
           />
         ))}
       </div>
@@ -162,3 +175,23 @@ const App = () => {
 };
 
 export default App;
+
+/* 
+let filtered = todoItems.filter(() => !isChecked);
+  
+  console.log(filtered);
+  if(filtered.length === todoItems.length){
+    console.log("good");
+  }
+  
+
+ 
+   if((!todoItems.length)||(elementState == true)){
+   
+    setCompletedList(!CompletedList);
+  }
+  const classFeature = classnames({
+   "visible":!CompletedList,
+   "hidden": CompletedList,
+   
+  });   */
