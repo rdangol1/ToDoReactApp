@@ -1,7 +1,9 @@
 import React, { useCallback, useState, useEffect } from "react";
 import classnames from "classnames";
+import { render } from "@testing-library/react";
+import { renderIntoDocument } from "react-dom/test-utils";
 
-const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted }) => {
+const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted, onEdit }) => {
   /**
    * This state is used to hold if the checkbox for the todo item
    * is checked or not
@@ -44,6 +46,9 @@ const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted }) => {
       <button onClick={onDelete} className="text-red-600 float-right">
         Delete
       </button>
+      <button onClick={onEdit} className="text-red-600 float-right mr-3">
+        Edit
+      </button>
     </div>
   );
 };
@@ -55,41 +60,70 @@ const App = () => {
    * the default value for that piece of state, in this case
    * referring to `todoItems`
    */
+
   const [todoItems, setTodoItems] = useState([
     {
       text: "Item #1",
       defaultCompleted: true,
+      done: true,
+      rememberMe: false
       // TODO: Add something like `done` to store if a todo is complete
     },
     {
       text: "Item #2",
       defaultCompleted: false,
+      done: false,
+      rememberMe: false
     },
   ]);
-
+  const addToLocalStorage = (todoItemList) =>{
+    localStorage.setItem('todo',todoItemList);
+    
+  }
+  const getFromLocalStorage =() =>{
+    localStorage.getItem('todo');
+   
+  }
+  getFromLocalStorage();
+  
   /**
    * This piece of state holds the current value of the user's
    * input to the "new todo" input
    */
   const [inputValue, setInputValue] = useState("");
-
   /**
    * This function is called any time a todo is checked or unchecked
    * NOTE: All this does right now is log to the console, but we
    * might do something with this down the road
    */
-  const checkboxToggled = (props) => {
-    console.log("A checkbox was toggled");
+  const checkboxToggled = (indexToToggle) => {
     // TODO: use something like the index to set the `checked` state true or false
-    let filtered = todoItems.filter((item) => item.props == true);
-    console.log(filtered);
+    const temporaryList =[... todoItems];
+    let tempItem ={... temporaryList[indexToToggle]};
+    tempItem.done =!tempItem.done;
+    temporaryList[indexToToggle]=tempItem;
+    setTodoItems(temporaryList);
+  }
+  const areYouDone =() =>{
+    const tempList=todoItems.filter(items => items.done == true)
+
+    if((tempList.length == todoItems.length) || (!todoItems.length)){
+      return true;
+    }
+    return false; 
+  };
+  
+  const clear=() =>{
+    const tempList=todoItems.filter(items => items.done === false)
+    setTodoItems(tempList);
+    
   };
 
   /**
    * This function is called when the user clicks on the "+" button
    * to add a todo to the list
    */
-  const handleAddTodo = () => {
+    const handleAddTodo = () => {
     // Check if input is empty; if it is, skip the rest of the function
     if (inputValue === "") {
       return;
@@ -99,12 +133,15 @@ const App = () => {
     const temporaryTodoItem = {
       text: inputValue,
       defaultCompleted: false,
+      done:false,
+      
     };
     // Add the temporary todo item to the existing list of todos
     setTodoItems([...todoItems, temporaryTodoItem]);
 
     // Clear the input
     setInputValue("");
+    addToLocalStorage(todoItems);
   };
 
   /**
@@ -117,6 +154,14 @@ const App = () => {
     }
   };
 
+  const getDate =() => {
+    const today = new Date();
+    const TodoMonth = today.getMonth + 1;
+    const TodoDay =today.getDate;
+    const TodoYear =today.getFullYear;
+    const ItemDate = TodoMonth +'/' + TodoDay +'/'+TodoYear;
+  }
+
   /**
    * Delete item from todo list
    */
@@ -126,14 +171,27 @@ const App = () => {
       ...todoItems.slice(indexToDelete + 1, todoItems.length),
     ];
     setTodoItems(tmpTodoList);
+    addToLocalStorage(todoItems);
   };
 
-  const EditItem = (indexToEdit) => {};
-
+  const editItem =(indexToEdit) =>{
+    const tempList = [
+      ...todoItems.slice(0, indexToEdit),
+      ...todoItems.slice(indexToEdit + 1, todoItems.length),
+    ];
+    setInputValue(todoItems[indexToEdit].text)
+    setTodoItems(tempList);
+    addToLocalStorage(todoItems);
+  }
+  const classFeatures = classnames({
+    "hidden":!areYouDone(),
+    "visible":areYouDone()
+  })
   return (
     <div className="contatiner py-20 mx-auto max-w-md">
       <div className="bg-white rounded-lg p-10 text-black shadow">
         <legend>Todo List</legend>
+        
         <div className="my-4 flex">
           <input
             type="text"
@@ -149,39 +207,35 @@ const App = () => {
           >
             +
           </button>
+          <button onClick={clear} className = "ml-5" >Clear</button>
+          
         </div>
-        {
-          // TODO: If every item in `todoItems` has `done` as true, render a message here
-        }
+        
+        <div className={classFeatures}>Yay!! you are all done</div> 
+        
         {todoItems.map((item, index) => (
           <TodoItem
-            key={index}
+            key={item.text}
             id={index}
             value={index}
             label={item.text}
             defaultCompleted={item.defaultCompleted}
-            onToggle={() => checkboxToggled()}
+            onToggle={() => checkboxToggled(index)}
             onDelete={() => deleteItem(index)}
+            onEdit={() => editItem(index)}
           />
         ))}
       </div>
     </div>
   );
-};
+}
 
 export default App;
 
-/* 
-let filtered = todoItems.filter(() => !isChecked);
-  
-  console.log(filtered);
-  if(filtered.length === todoItems.length){
-    console.log("good");
-  }
-  
+
 
  
-   if((!todoItems.length)||(elementState == true)){
+ /*   if((!todoItems.length)||(elementState == true)){
    
     setCompletedList(!CompletedList);
   }
@@ -189,4 +243,5 @@ let filtered = todoItems.filter(() => !isChecked);
    "visible":!CompletedList,
    "hidden": CompletedList,
    
-  });   */
+  });    */
+
