@@ -4,13 +4,14 @@ import FlipMove from "react-flip-move";
 
 // Our components
 import TodoItem from "./components/TodoItem";
+import TextInput from "./components/TextInput";
+import AddButton from "./components/AddButton";
 
 /**
  * Components to componinitize
  * - Save todo button
  * - Text input
  */
-
 const App = () => {
   /**
    * This sets up the todo state and sets the default todos
@@ -18,7 +19,7 @@ const App = () => {
    * the default value for that piece of state, in this case
    * referring to `todoItems`
    */
-
+  const [inputValue, setInputValue] = useState("");
   const [todoItems, setTodoItems] = useState([
     {
       text: "Item #1",
@@ -34,55 +35,6 @@ const App = () => {
       createDate: "2021-04-15 12:16:15",
     },
   ]);
-
-  useEffect(() => {
-    const data = localStorage.getItem("todo");
-
-    if (data) {
-      setTodoItems(JSON.parse(data));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("todo", JSON.stringify(todoItems));
-  });
-
-  /**
-   * This piece of state holds the current value of the user's
-   * input to the "new todo" input
-   */
-  const [inputValue, setInputValue] = useState("");
-  /**
-   * This function is called any time a todo is checked or unchecked
-   * NOTE: All this does right now is log to the console, but we
-   * might do something with this down the road
-   */
-  const checkboxToggled = (indexToToggle) => {
-    // TODO: use something like the index to set the `checked` state true or false
-    const temporaryList = [...todoItems];
-    let tempItem = { ...temporaryList[indexToToggle] };
-    tempItem.done = !tempItem.done;
-    temporaryList[indexToToggle] = tempItem;
-    setTodoItems(temporaryList);
-  };
-  const areYouDone = () => {
-    const tempList = todoItems.filter((items) => items.done === true);
-
-    if (tempList.length === todoItems.length || !todoItems.length) {
-      return true;
-    }
-    return false;
-  };
-
-  const clear = () => {
-    const tempList = todoItems.filter((items) => items.done === false);
-    setTodoItems(tempList);
-  };
-
-  /**
-   * This function is called when the user clicks on the "+" button
-   * to add a todo to the list
-   */
   const handleAddTodo = () => {
     // Check if input is empty; if it is, skip the rest of the function
     if (inputValue === "") {
@@ -94,26 +46,15 @@ const App = () => {
       text: inputValue,
       defaultCompleted: false,
       done: false,
-      createDate: getDate(),
+      createDate: getEntireDate(),
     };
     // Add the temporary todo item to the existing list of todos
     setTodoItems([...todoItems, temporaryTodoItem]);
 
     // Clear the input
-    setInputValue("");
+    setUpInputValue("");
   };
-
-  /**
-   * Check if enter
-   */
-  const handleKeyUp = (event) => {
-    if (event.keyCode === 13) {
-      event.preventDefault();
-      handleAddTodo();
-    }
-  };
-
-  const getDate = () => {
+  const getEntireDate = () => {
     var today = new Date();
     const ItemDate = JSON.parse(
       JSON.stringify(
@@ -132,6 +73,44 @@ const App = () => {
     );
     return ItemDate;
   };
+
+
+  useEffect(() => {
+    const data = localStorage.getItem("todo");
+
+    if (data) {
+      setTodoItems(JSON.parse(data));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("todo", JSON.stringify(todoItems));
+  });
+
+
+  const checkboxToggled = (indexToToggle) => {
+    // TODO: use something like the index to set the `checked` state true or false
+    const temporaryList = [...todoItems];
+    let tempItem = { ...temporaryList[indexToToggle] };
+    tempItem.done = !tempItem.done;
+    temporaryList[indexToToggle] = tempItem;
+    setTodoItems(temporaryList);
+  };
+  
+  const areYouDone = () => {
+    const tempList = todoItems.filter((items) => items.done === true);
+
+    if (tempList.length === todoItems.length || !todoItems.length) {
+      return true;
+    }
+    return false;
+  };
+
+  const clear = () => {
+    const tempList = todoItems.filter((items) => items.done === false);
+    setTodoItems(tempList);
+  };
+
   const getItemPriority = (indexToCheck) => {
     const today = new Date();
     const event = today.setMinutes(today.getMinutes() - 3);
@@ -152,7 +131,7 @@ const App = () => {
       const convertTodate = new Date(temporaryList[i].createDate);
       temporaryList[i].createDate = convertTodate;
     }
-    temporaryList.sort((a, b) => (a.createDate > b.createDate ? 1 : -1));
+    temporaryList.sort((a, b) => (a.createDate < b.createDate ? 1 : -1));
     setTodoItems(temporaryList);
 
     for (let i = 0; i < todoItems.length; i++) {
@@ -197,39 +176,42 @@ const App = () => {
     setInputValue(todoItems[indexToEdit].text);
     setTodoItems(tempList);
   };
+
   const classFeatures = classnames({
     hidden: !areYouDone(),
     visible: areYouDone(),
   });
+
+  const setUpInputValue = (inputTofill) =>{
+    setInputValue(inputTofill);
+  }
   return (
     <div className="contatiner py-20 mx-auto max-w-md ">
       <div className="bg-white rounded-lg p-10 text-black shadow">
+
         <legend>Todo List</legend>
 
         <div className="my-4 flex">
-          <input
-            type="text"
-            className="p-2 border-2 border-gray-200 rounded-md mr-2 flex-1"
-            onChange={(event) => setInputValue(event.target.value)}
-            onKeyUp={handleKeyUp}
-            value={inputValue}
-          />
-          <button
-            onClick={handleAddTodo}
-            type="submit"
-            className="bg-green-400 rounded-full text-white w-10 h-10 ring-4 ring-green-200"
-          >
-            +
-          </button>
+          <TextInput
+            handleAddTodo={handleAddTodo}
+            settingInput ={setUpInputValue} 
+            inputValueToSet ={inputValue}/>
+          <AddButton 
+            handleAddTodo={handleAddTodo}
+            />
           <button onClick={clear} className="ml-5 rounded">
             Clear
           </button>
         </div>
+
         <button onClick={sortItems} className="m-1">
-          Sort Items
+          Sort Latest
         </button>
+
         <div className={classFeatures}>Yay!! you are all done</div>
+
         <FlipMove className="flip-wrapper my-1 ">
+
           {todoItems.map((item, index) => (
             <div key={item.text}>
               <TodoItem
