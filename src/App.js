@@ -47,10 +47,10 @@ const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted, onEdit, cre
         name={id}
         checked={isChecked}
       />
-      <label className={classname} for={id}>
+      <label className={classname} htmlFor={id}>
         {label}
       </label><br></br>
-      <label className="text-gray-400 text-sm" for={id}>
+      <label className="text-gray-400 text-sm" htmlFor={id}>
         {createDate}
       </label>
       <button onClick={onDelete} className="text-red-600 float-right rounded-md p-0.5 ">
@@ -77,14 +77,14 @@ const App = () => {
       text: "Item #1",
       defaultCompleted: true,
       done: true,
-      createDate:'03/02/2021'
+      createDate:'2021-03-02 10:11:15'
       // TODO: Add something like `done` to store if a todo is complete
     },
     {
       text: "Item #2",
       defaultCompleted: false,
       done: false,
-      createDate:'04/15/2021'
+      createDate:'2021-04-15 12:16:15'
     },
   ]);
 
@@ -92,7 +92,7 @@ const App = () => {
     const data =localStorage.getItem('todo');
 
     if(data){
-      setTodoItems(JSON.parse(data));
+     setTodoItems(JSON.parse(data));
     }
   },[]);
     
@@ -112,16 +112,16 @@ const App = () => {
    */
   const checkboxToggled = (indexToToggle) => {
     // TODO: use something like the index to set the `checked` state true or false
-    const temporaryList =[... todoItems];
-    let tempItem ={... temporaryList[indexToToggle]};
+    const temporaryList =[...todoItems];
+    let tempItem ={...temporaryList[indexToToggle]};
     tempItem.done =!tempItem.done;
     temporaryList[indexToToggle]=tempItem;
     setTodoItems(temporaryList);
   }
   const areYouDone =() =>{
-    const tempList=todoItems.filter(items => items.done == true)
+    const tempList = todoItems.filter(items => items.done === true)
 
-    if((tempList.length == todoItems.length) || (!todoItems.length)){
+    if((tempList.length === todoItems.length) || (!todoItems.length)){
       return true;
     }
     return false; 
@@ -170,36 +170,43 @@ const App = () => {
   };
 
   const getDate =() => {
-    const today = new Date();
-    const ItemDate = JSON.parse(JSON.stringify(today.getMonth() + 1 + '/' + today.getDate() + '/' + today.getFullYear()));
+    var today = new Date();
+    const ItemDate = JSON.parse(JSON.stringify(today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds()));
     return ItemDate;
     
   }
   const getItemPriority =(indexToCheck)=>{
-    const today = new Date;
-    today.setDate(today.getDay()- 3);
+    const today = new Date();
+    const event = today.setMinutes(today.getMinutes()-3)
     
     const itemDate = todoItems[indexToCheck].createDate;
     
-    const itemDates =new Date(itemDate);
+    const itemDates = new Date(itemDate).getTime();
+    
    
-    if (itemDates.getTime() < today.getTime()){
+    if (itemDates < event){
       return false;
     }
     return true;
   }
+  
   const sortItems =() =>{
     const temporaryList = [...todoItems];
     for(let i=0; i< todoItems.length;i++){
-      const convertTodate = (new Date(temporaryList[i].createDate)).getTime()
+      const convertTodate = (new Date(temporaryList[i].createDate))
       temporaryList[i].createDate = convertTodate;
     }
-    temporaryList.sort((a, b) => a.createDate < b.createDate ? 1 : -1)
+    temporaryList.sort((a, b) => a.createDate > b.createDate ? 1 : -1)
     setTodoItems(temporaryList);
     
+    
     for(let i=0; i< todoItems.length;i++){
-      const convertTodate = JSON.parse(JSON.stringify((new Date(temporaryList[i].createDate))));
-      temporaryList[i].createDate = convertTodate;
+      
+      const convertTodate = temporaryList[i].createDate;
+      const ItemDate = JSON.parse(JSON.stringify(convertTodate.getFullYear() + '-' + (convertTodate.getMonth() + 1) + '-' + convertTodate.getDate() + ' ' + convertTodate.getHours() + ':' + convertTodate.getMinutes() + ':' + convertTodate.getSeconds()));
+  
+      temporaryList[i].createDate = ItemDate;
+      
     }
     setTodoItems(temporaryList);
   }
@@ -254,10 +261,9 @@ const App = () => {
         </div>
         <button onClick={sortItems} className="m-1">Sort Items</button>
         <div className={classFeatures}>Yay!! you are all done</div> 
-        {/* <FlipMove className="flip-wrapper my-1 "> */}
+        <FlipMove className="flip-wrapper my-1 ">
           {todoItems.map((item, index) => (
-            <TodoItem
-              key={item.text}
+            <div key={item.text} ><TodoItem 
               id={index}
               value={index}
               label={item.text}
@@ -267,9 +273,9 @@ const App = () => {
               onDelete={() => deleteItem(index)}
               onEdit={() => editItem(index)}
               createPriority ={ () =>getItemPriority(index)}
-            />
+            /></div>
           ))}
-        {/* </FlipMove> */}
+        </FlipMove>
       </div>
     </div>
     
