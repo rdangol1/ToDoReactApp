@@ -11,8 +11,10 @@ Tasks:
 - [x] "React-ify" components to make them reusable
 - [x] Add ability to add new todos
 - [x] Add ability to complete todos
-- [ ] Add ability to delete todos
-- [ ] Get creative! (sorting completed todos, saving todos in localstorage, etc.)
+- [x] Add ability to delete todos
+- [x] Get creative! (sorting completed todos, saving todos in localstorage, etc.)
+- [ ] Move components into separate directories
+- [ ] Write tests
 
 ## Available Scripts
 
