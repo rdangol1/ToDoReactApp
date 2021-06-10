@@ -1,15 +1,15 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import classnames from "classnames";
-import { render } from "@testing-library/react";
-import { renderIntoDocument } from "react-dom/test-utils";
+import FlipMove from 'react-flip-move';
 
-const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted, onEdit }) => {
+
+const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted, onEdit, createPriority, createDate}) => {
   /**
    * This state is used to hold if the checkbox for the todo item
    * is checked or not
    */
   const [isChecked, setIsChecked] = useState(defaultCompleted);
-  //const [CompletedList, setCompletedList] = useState(false);
+  
   /**
    * This function is fired when the checkbox for the todo item
    * is clicked
@@ -30,8 +30,15 @@ const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted, onEdit }) =
     "text-gray-300": isChecked, // If checkbox is checked
   });
 
+  
+  const classCharecter = classnames({
+    "border-b-2 p-2 bg-blue-100 m-1 rounded-md": createPriority(), 
+    "border-b-2 p-2 bg-red-100 m-1 rounded-md": !createPriority(), 
+  
+  });
+
   return (
-    <div className="border-b-2 p-2">
+    <div className={classCharecter}>
       <input
         onChange={handleClick}
         className="mr-5"
@@ -42,14 +49,18 @@ const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted, onEdit }) =
       />
       <label className={classname} for={id}>
         {label}
+      </label><br></br>
+      <label className="text-gray-400 text-sm" for={id}>
+        {createDate}
       </label>
-      <button onClick={onDelete} className="text-red-600 float-right">
+      <button onClick={onDelete} className="text-red-600 float-right rounded-md p-0.5 ">
         Delete
       </button>
-      <button onClick={onEdit} className="text-red-600 float-right mr-3">
+      <button onClick={onEdit} className="text-red-600 float-right mr-3 rounded-md p-0.5">
         Edit
       </button>
     </div>
+    
   );
 };
 
@@ -66,25 +77,28 @@ const App = () => {
       text: "Item #1",
       defaultCompleted: true,
       done: true,
-      rememberMe: false
+      createDate:'03/02/2021'
       // TODO: Add something like `done` to store if a todo is complete
     },
     {
       text: "Item #2",
       defaultCompleted: false,
       done: false,
-      rememberMe: false
+      createDate:'04/15/2021'
     },
   ]);
-  const addToLocalStorage = (todoItemList) =>{
-    localStorage.setItem('todo',todoItemList);
+
+  useEffect( () => {
+    const data =localStorage.getItem('todo');
+
+    if(data){
+      setTodoItems(JSON.parse(data));
+    }
+  },[]);
     
-  }
-  const getFromLocalStorage =() =>{
-    localStorage.getItem('todo');
-   
-  }
-  getFromLocalStorage();
+  useEffect( () => {
+    localStorage.setItem('todo', JSON.stringify(todoItems))}
+  );
   
   /**
    * This piece of state holds the current value of the user's
@@ -134,14 +148,15 @@ const App = () => {
       text: inputValue,
       defaultCompleted: false,
       done:false,
-      
+      createDate:getDate(),
+
     };
     // Add the temporary todo item to the existing list of todos
     setTodoItems([...todoItems, temporaryTodoItem]);
 
     // Clear the input
     setInputValue("");
-    addToLocalStorage(todoItems);
+    
   };
 
   /**
@@ -156,12 +171,39 @@ const App = () => {
 
   const getDate =() => {
     const today = new Date();
-    const TodoMonth = today.getMonth + 1;
-    const TodoDay =today.getDate;
-    const TodoYear =today.getFullYear;
-    const ItemDate = TodoMonth +'/' + TodoDay +'/'+TodoYear;
+    const ItemDate = JSON.parse(JSON.stringify(today.getMonth() + 1 + '/' + today.getDate() + '/' + today.getFullYear()));
+    return ItemDate;
+    
   }
-
+  const getItemPriority =(indexToCheck)=>{
+    const today = new Date;
+    today.setDate(today.getDay()- 3);
+    
+    const itemDate = todoItems[indexToCheck].createDate;
+    
+    const itemDates =new Date(itemDate);
+   
+    if (itemDates.getTime() < today.getTime()){
+      return false;
+    }
+    return true;
+  }
+  const sortItems =() =>{
+    const temporaryList = [...todoItems];
+    for(let i=0; i< todoItems.length;i++){
+      const convertTodate = (new Date(temporaryList[i].createDate)).getTime()
+      temporaryList[i].createDate = convertTodate;
+    }
+    temporaryList.sort((a, b) => a.createDate < b.createDate ? 1 : -1)
+    setTodoItems(temporaryList);
+    
+    for(let i=0; i< todoItems.length;i++){
+      const convertTodate = JSON.parse(JSON.stringify((new Date(temporaryList[i].createDate))));
+      temporaryList[i].createDate = convertTodate;
+    }
+    setTodoItems(temporaryList);
+  }
+  
   /**
    * Delete item from todo list
    */
@@ -171,7 +213,7 @@ const App = () => {
       ...todoItems.slice(indexToDelete + 1, todoItems.length),
     ];
     setTodoItems(tmpTodoList);
-    addToLocalStorage(todoItems);
+    
   };
 
   const editItem =(indexToEdit) =>{
@@ -181,14 +223,15 @@ const App = () => {
     ];
     setInputValue(todoItems[indexToEdit].text)
     setTodoItems(tempList);
-    addToLocalStorage(todoItems);
+    
   }
   const classFeatures = classnames({
     "hidden":!areYouDone(),
     "visible":areYouDone()
   })
   return (
-    <div className="contatiner py-20 mx-auto max-w-md">
+
+    <div className="contatiner py-20 mx-auto max-w-md ">
       <div className="bg-white rounded-lg p-10 text-black shadow">
         <legend>Todo List</legend>
         
@@ -207,41 +250,32 @@ const App = () => {
           >
             +
           </button>
-          <button onClick={clear} className = "ml-5" >Clear</button>
-          
+          <button onClick={clear} className = "ml-5 rounded" >Clear</button>
         </div>
-        
+        <button onClick={sortItems} className="m-1">Sort Items</button>
         <div className={classFeatures}>Yay!! you are all done</div> 
-        
-        {todoItems.map((item, index) => (
-          <TodoItem
-            key={item.text}
-            id={index}
-            value={index}
-            label={item.text}
-            defaultCompleted={item.defaultCompleted}
-            onToggle={() => checkboxToggled(index)}
-            onDelete={() => deleteItem(index)}
-            onEdit={() => editItem(index)}
-          />
-        ))}
+        {/* <FlipMove className="flip-wrapper my-1 "> */}
+          {todoItems.map((item, index) => (
+            <TodoItem
+              key={item.text}
+              id={index}
+              value={index}
+              label={item.text}
+              createDate={item.createDate}
+              defaultCompleted={item.defaultCompleted}
+              onToggle={() => checkboxToggled(index)}
+              onDelete={() => deleteItem(index)}
+              onEdit={() => editItem(index)}
+              createPriority ={ () =>getItemPriority(index)}
+            />
+          ))}
+        {/* </FlipMove> */}
       </div>
     </div>
+    
   );
 }
 
 export default App;
 
-
-
- 
- /*   if((!todoItems.length)||(elementState == true)){
-   
-    setCompletedList(!CompletedList);
-  }
-  const classFeature = classnames({
-   "visible":!CompletedList,
-   "hidden": CompletedList,
-   
-  });    */
 
