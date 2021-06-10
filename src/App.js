@@ -1,68 +1,15 @@
 import React, { useState, useEffect } from "react";
 import classnames from "classnames";
-import FlipMove from 'react-flip-move';
+import FlipMove from "react-flip-move";
 
+// Our components
+import TodoItem from "./components/TodoItem";
 
-const TodoItem = ({ id, onToggle, onDelete, label, defaultCompleted, onEdit, createPriority, createDate}) => {
-  /**
-   * This state is used to hold if the checkbox for the todo item
-   * is checked or not
-   */
-  const [isChecked, setIsChecked] = useState(defaultCompleted);
-  
-  /**
-   * This function is fired when the checkbox for the todo item
-   * is clicked
-   */
-  const handleClick = () => {
-    // Make checked state opposite its value and update the state
-    setIsChecked(!isChecked);
-
-    // Call `onToggle` function from props
-    onToggle();
-  };
-  /**
-   * Classnames to conditionally be applied to the `label`
-   */
-  const classname = classnames({
-    "text-gray-600": !isChecked, // If checkbox is not checked
-    "line-through": isChecked, // If checkbox is checked
-    "text-gray-300": isChecked, // If checkbox is checked
-  });
-
-  
-  const classCharecter = classnames({
-    "border-b-2 p-2 bg-blue-100 m-1 rounded-md": createPriority(), 
-    "border-b-2 p-2 bg-red-100 m-1 rounded-md": !createPriority(), 
-  
-  });
-
-  return (
-    <div className={classCharecter}>
-      <input
-        onChange={handleClick}
-        className="mr-5"
-        type="checkbox"
-        id={id}
-        name={id}
-        checked={isChecked}
-      />
-      <label className={classname} htmlFor={id}>
-        {label}
-      </label><br></br>
-      <label className="text-gray-400 text-sm" htmlFor={id}>
-        {createDate}
-      </label>
-      <button onClick={onDelete} className="text-red-600 float-right rounded-md p-0.5 ">
-        Delete
-      </button>
-      <button onClick={onEdit} className="text-red-600 float-right mr-3 rounded-md p-0.5">
-        Edit
-      </button>
-    </div>
-    
-  );
-};
+/**
+ * Components to componinitize
+ * - Save todo button
+ * - Text input
+ */
 
 const App = () => {
   /**
@@ -77,29 +24,29 @@ const App = () => {
       text: "Item #1",
       defaultCompleted: true,
       done: true,
-      createDate:'2021-03-02 10:11:15'
+      createDate: "2021-03-02 10:11:15",
       // TODO: Add something like `done` to store if a todo is complete
     },
     {
       text: "Item #2",
       defaultCompleted: false,
       done: false,
-      createDate:'2021-04-15 12:16:15'
+      createDate: "2021-04-15 12:16:15",
     },
   ]);
 
-  useEffect( () => {
-    const data =localStorage.getItem('todo');
+  useEffect(() => {
+    const data = localStorage.getItem("todo");
 
-    if(data){
-     setTodoItems(JSON.parse(data));
+    if (data) {
+      setTodoItems(JSON.parse(data));
     }
-  },[]);
-    
-  useEffect( () => {
-    localStorage.setItem('todo', JSON.stringify(todoItems))}
-  );
-  
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("todo", JSON.stringify(todoItems));
+  });
+
   /**
    * This piece of state holds the current value of the user's
    * input to the "new todo" input
@@ -112,32 +59,31 @@ const App = () => {
    */
   const checkboxToggled = (indexToToggle) => {
     // TODO: use something like the index to set the `checked` state true or false
-    const temporaryList =[...todoItems];
-    let tempItem ={...temporaryList[indexToToggle]};
-    tempItem.done =!tempItem.done;
-    temporaryList[indexToToggle]=tempItem;
+    const temporaryList = [...todoItems];
+    let tempItem = { ...temporaryList[indexToToggle] };
+    tempItem.done = !tempItem.done;
+    temporaryList[indexToToggle] = tempItem;
     setTodoItems(temporaryList);
-  }
-  const areYouDone =() =>{
-    const tempList = todoItems.filter(items => items.done === true)
+  };
+  const areYouDone = () => {
+    const tempList = todoItems.filter((items) => items.done === true);
 
-    if((tempList.length === todoItems.length) || (!todoItems.length)){
+    if (tempList.length === todoItems.length || !todoItems.length) {
       return true;
     }
-    return false; 
+    return false;
   };
-  
-  const clear=() =>{
-    const tempList=todoItems.filter(items => items.done === false)
+
+  const clear = () => {
+    const tempList = todoItems.filter((items) => items.done === false);
     setTodoItems(tempList);
-    
   };
 
   /**
    * This function is called when the user clicks on the "+" button
    * to add a todo to the list
    */
-    const handleAddTodo = () => {
+  const handleAddTodo = () => {
     // Check if input is empty; if it is, skip the rest of the function
     if (inputValue === "") {
       return;
@@ -147,16 +93,14 @@ const App = () => {
     const temporaryTodoItem = {
       text: inputValue,
       defaultCompleted: false,
-      done:false,
-      createDate:getDate(),
-
+      done: false,
+      createDate: getDate(),
     };
     // Add the temporary todo item to the existing list of todos
     setTodoItems([...todoItems, temporaryTodoItem]);
 
     // Clear the input
     setInputValue("");
-    
   };
 
   /**
@@ -169,48 +113,71 @@ const App = () => {
     }
   };
 
-  const getDate =() => {
+  const getDate = () => {
     var today = new Date();
-    const ItemDate = JSON.parse(JSON.stringify(today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds()));
+    const ItemDate = JSON.parse(
+      JSON.stringify(
+        today.getFullYear() +
+          "-" +
+          (today.getMonth() + 1) +
+          "-" +
+          today.getDate() +
+          " " +
+          today.getHours() +
+          ":" +
+          today.getMinutes() +
+          ":" +
+          today.getSeconds()
+      )
+    );
     return ItemDate;
-    
-  }
-  const getItemPriority =(indexToCheck)=>{
+  };
+  const getItemPriority = (indexToCheck) => {
     const today = new Date();
-    const event = today.setMinutes(today.getMinutes()-3)
-    
+    const event = today.setMinutes(today.getMinutes() - 3);
+
     const itemDate = todoItems[indexToCheck].createDate;
-    
+
     const itemDates = new Date(itemDate).getTime();
-    
-   
-    if (itemDates < event){
+
+    if (itemDates < event) {
       return false;
     }
     return true;
-  }
-  
-  const sortItems =() =>{
+  };
+
+  const sortItems = () => {
     const temporaryList = [...todoItems];
-    for(let i=0; i< todoItems.length;i++){
-      const convertTodate = (new Date(temporaryList[i].createDate))
+    for (let i = 0; i < todoItems.length; i++) {
+      const convertTodate = new Date(temporaryList[i].createDate);
       temporaryList[i].createDate = convertTodate;
     }
-    temporaryList.sort((a, b) => a.createDate > b.createDate ? 1 : -1)
+    temporaryList.sort((a, b) => (a.createDate > b.createDate ? 1 : -1));
     setTodoItems(temporaryList);
-    
-    
-    for(let i=0; i< todoItems.length;i++){
-      
+
+    for (let i = 0; i < todoItems.length; i++) {
       const convertTodate = temporaryList[i].createDate;
-      const ItemDate = JSON.parse(JSON.stringify(convertTodate.getFullYear() + '-' + (convertTodate.getMonth() + 1) + '-' + convertTodate.getDate() + ' ' + convertTodate.getHours() + ':' + convertTodate.getMinutes() + ':' + convertTodate.getSeconds()));
-  
+      const ItemDate = JSON.parse(
+        JSON.stringify(
+          convertTodate.getFullYear() +
+            "-" +
+            (convertTodate.getMonth() + 1) +
+            "-" +
+            convertTodate.getDate() +
+            " " +
+            convertTodate.getHours() +
+            ":" +
+            convertTodate.getMinutes() +
+            ":" +
+            convertTodate.getSeconds()
+        )
+      );
+
       temporaryList[i].createDate = ItemDate;
-      
     }
     setTodoItems(temporaryList);
-  }
-  
+  };
+
   /**
    * Delete item from todo list
    */
@@ -220,28 +187,25 @@ const App = () => {
       ...todoItems.slice(indexToDelete + 1, todoItems.length),
     ];
     setTodoItems(tmpTodoList);
-    
   };
 
-  const editItem =(indexToEdit) =>{
+  const editItem = (indexToEdit) => {
     const tempList = [
       ...todoItems.slice(0, indexToEdit),
       ...todoItems.slice(indexToEdit + 1, todoItems.length),
     ];
-    setInputValue(todoItems[indexToEdit].text)
+    setInputValue(todoItems[indexToEdit].text);
     setTodoItems(tempList);
-    
-  }
+  };
   const classFeatures = classnames({
-    "hidden":!areYouDone(),
-    "visible":areYouDone()
-  })
+    hidden: !areYouDone(),
+    visible: areYouDone(),
+  });
   return (
-
     <div className="contatiner py-20 mx-auto max-w-md ">
       <div className="bg-white rounded-lg p-10 text-black shadow">
         <legend>Todo List</legend>
-        
+
         <div className="my-4 flex">
           <input
             type="text"
@@ -257,31 +221,34 @@ const App = () => {
           >
             +
           </button>
-          <button onClick={clear} className = "ml-5 rounded" >Clear</button>
+          <button onClick={clear} className="ml-5 rounded">
+            Clear
+          </button>
         </div>
-        <button onClick={sortItems} className="m-1">Sort Items</button>
-        <div className={classFeatures}>Yay!! you are all done</div> 
+        <button onClick={sortItems} className="m-1">
+          Sort Items
+        </button>
+        <div className={classFeatures}>Yay!! you are all done</div>
         <FlipMove className="flip-wrapper my-1 ">
           {todoItems.map((item, index) => (
-            <div key={item.text} ><TodoItem 
-              id={index}
-              value={index}
-              label={item.text}
-              createDate={item.createDate}
-              defaultCompleted={item.defaultCompleted}
-              onToggle={() => checkboxToggled(index)}
-              onDelete={() => deleteItem(index)}
-              onEdit={() => editItem(index)}
-              createPriority ={ () =>getItemPriority(index)}
-            /></div>
+            <div key={item.text}>
+              <TodoItem
+                id={index}
+                value={index}
+                label={item.text}
+                createDate={item.createDate}
+                defaultCompleted={item.defaultCompleted}
+                onToggle={() => checkboxToggled(index)}
+                onDelete={() => deleteItem(index)}
+                onEdit={() => editItem(index)}
+                createPriority={() => getItemPriority(index)}
+              />
+            </div>
           ))}
         </FlipMove>
       </div>
     </div>
-    
   );
-}
+};
 
 export default App;
-
-
