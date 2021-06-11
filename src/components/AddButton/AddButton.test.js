@@ -9,19 +9,19 @@ const defaultProps = {
 const getComponent = (props = {}) =>
   render(<AddButton {...defaultProps} {...props} />);
 
-test("default button", () => {
+test("button renders", () => {
   getComponent();
   const button = screen.getByTestId(testId);
-  expect(button).toBeInstanceOf(HTMLButtonElement);
   expect(button).toBeInTheDocument();
 });
 
 test("callback fires on click", () => {
-  const onClick = jest.fn();
-  getComponent({ onClick });
+  const onClickMockFunction = jest.fn();
+  getComponent({ onClick: onClickMockFunction });
   const button = screen.getByTestId(testId);
-  expect(onClick).not.toHaveBeenCalled();
+  expect(onClickMockFunction).not.toHaveBeenCalled();
 
   fireEvent.click(button);
-  expect(onClick).toHaveBeenCalledTimes(1);
+
+  expect(onClickMockFunction).toHaveBeenCalledTimes(1);
 });

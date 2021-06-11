@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import classnames from "classnames";
-import {DeleteIcon} from "../Icons";
-import {EditIcon} from "../Icons";
+import { DeleteIcon } from "../Icons";
+import { EditIcon } from "../Icons";
 
 const TodoItem = ({
   id,
@@ -30,6 +30,7 @@ const TodoItem = ({
     // Call `onToggle` function from props
     onToggle();
   };
+
   /**
    * Classnames to conditionally be applied to the `label`
    */
@@ -63,12 +64,14 @@ const TodoItem = ({
       </label>
       <button
         onClick={onDelete}
-        className="text-red-600 float-right rounded-md p-0.5 ">
+        className="text-red-600 float-right rounded-md p-0.5 "
+      >
         <DeleteIcon />
       </button>
       <button
         onClick={onEdit}
-        className="text-red-600 float-right mr-3 rounded-md p-0.5">
+        className="text-red-600 float-right mr-3 rounded-md p-0.5"
+      >
         <EditIcon />
       </button>
     </div>

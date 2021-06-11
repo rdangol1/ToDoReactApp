@@ -22,21 +22,7 @@ const App = () => {
    * referring to `todoItems`
    */
   const [inputValue, setInputValue] = useState("");
-  const [todoItems, setTodoItems] = useState([
-    {
-      text: "Item #1",
-      defaultCompleted: true,
-      done: true,
-      createDate: "2021-03-02 10:11:15",
-      // TODO: Add something like `done` to store if a todo is complete
-    },
-    {
-      text: "Item #2",
-      defaultCompleted: false,
-      done: false,
-      createDate: "2021-04-15 12:16:15",
-    },
-  ]);
+  const [todoItems, setTodoItems] = useState([]);
   const handleAddTodo = () => {
     // Check if input is empty; if it is, skip the rest of the function
     if (inputValue === "") {
@@ -46,7 +32,6 @@ const App = () => {
     // This is the temporary todo item using the `inputValue`
     const temporaryTodoItem = {
       text: inputValue,
-      defaultCompleted: false,
       done: false,
       createDate: getEntireDate(),
     };
@@ -192,11 +177,11 @@ const App = () => {
 
         <div className="my-4 flex">
           <TextInput
-            handleAddTodo={handleAddTodo}
-            settingInput={setUpInputValue}
-            inputValueToSet={inputValue}
+            onSubmit={handleAddTodo}
+            onChange={setUpInputValue}
+            value={inputValue}
           />
-          <AddButton handleAddTodo={handleAddTodo} />
+          <AddButton onClick={handleAddTodo} />
         </div>
         <div>
           <button
@@ -222,7 +207,7 @@ const App = () => {
                 value={index}
                 label={item.text}
                 createDate={item.createDate}
-                defaultCompleted={item.defaultCompleted}
+                defaultCompleted={item.done}
                 onToggle={() => checkboxToggled(index)}
                 onDelete={() => deleteItem(index)}
                 onEdit={() => editItem(index)}
