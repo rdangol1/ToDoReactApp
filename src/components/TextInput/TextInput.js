@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import classnames from "classnames";
+import React from "react";
+
 
 const TextInput =({ handleAddTodo, settingInput, inputValueToSet}) => {
 

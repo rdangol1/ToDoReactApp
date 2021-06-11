@@ -6,6 +6,8 @@ import FlipMove from "react-flip-move";
 import TodoItem from "./components/TodoItem";
 import TextInput from "./components/TextInput";
 import AddButton from "./components/AddButton";
+import {SortIcon} from "./components/Icons";
+import {FilterIcon} from "./components/Icons";
 
 /**
  * Components to componinitize
@@ -151,7 +153,7 @@ const App = () => {
             convertTodate.getSeconds()
         )
       );
-
+      
       temporaryList[i].createDate = ItemDate;
     }
     setTodoItems(temporaryList);
@@ -186,7 +188,7 @@ const App = () => {
     setInputValue(inputTofill);
   }
   return (
-    <div className="contatiner py-20 mx-auto max-w-md ">
+    <div className="contatiner py-20 mx-auto max-w-md">
       <div className="bg-white rounded-lg p-10 text-black shadow">
 
         <legend>Todo List</legend>
@@ -198,20 +200,18 @@ const App = () => {
             inputValueToSet ={inputValue}/>
           <AddButton 
             handleAddTodo={handleAddTodo}
-            />
-          <button onClick={clear} className="ml-5 rounded">
-            Clear
-          </button>
+          />
         </div>
+        <div>
+          <button onClick={clear} className="m-1 text-white bg-purple-300 p-3 rounded hover:text-green-300">
+              <FilterIcon/>
+            </button>
+          <button onClick={sortItems} className="m-3 text-white bg-purple-300 p-2.5 rounded hover:text-green-300">
+              <SortIcon/>
+          </button>
 
-        <button onClick={sortItems} className="m-1">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-        </svg>
-        </button>
-
-        <div className={classFeatures}>Yay!! you are all done</div>
-
+          <div className={classFeatures}>Yay!! You are all done</div>
+        </div>
         <FlipMove className="flip-wrapper my-1 ">
 
           {todoItems.map((item, index) => (
