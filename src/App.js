@@ -6,8 +6,8 @@ import FlipMove from "react-flip-move";
 import TodoItem from "./components/TodoItem";
 import TextInput from "./components/TextInput";
 import AddButton from "./components/AddButton";
-import {SortIcon} from "./components/Icons";
-import {FilterIcon} from "./components/Icons";
+import { SortIcon } from "./components/Icons";
+import { FilterIcon } from "./components/Icons";
 
 /**
  * Components to componinitize
@@ -76,7 +76,6 @@ const App = () => {
     return ItemDate;
   };
 
-
   useEffect(() => {
     const data = localStorage.getItem("todo");
 
@@ -89,7 +88,6 @@ const App = () => {
     localStorage.setItem("todo", JSON.stringify(todoItems));
   });
 
-
   const checkboxToggled = (indexToToggle) => {
     // TODO: use something like the index to set the `checked` state true or false
     const temporaryList = [...todoItems];
@@ -98,7 +96,7 @@ const App = () => {
     temporaryList[indexToToggle] = tempItem;
     setTodoItems(temporaryList);
   };
-  
+
   const areYouDone = () => {
     const tempList = todoItems.filter((items) => items.done === true);
 
@@ -153,7 +151,7 @@ const App = () => {
             convertTodate.getSeconds()
         )
       );
-      
+
       temporaryList[i].createDate = ItemDate;
     }
     setTodoItems(temporaryList);
@@ -184,36 +182,39 @@ const App = () => {
     visible: areYouDone(),
   });
 
-  const setUpInputValue = (inputTofill) =>{
+  const setUpInputValue = (inputTofill) => {
     setInputValue(inputTofill);
-  }
+  };
   return (
     <div className="contatiner py-20 mx-auto max-w-md">
       <div className="bg-white rounded-lg p-10 text-black shadow">
-
         <legend>Todo List</legend>
 
         <div className="my-4 flex">
           <TextInput
             handleAddTodo={handleAddTodo}
-            settingInput ={setUpInputValue} 
-            inputValueToSet ={inputValue}/>
-          <AddButton 
-            handleAddTodo={handleAddTodo}
+            settingInput={setUpInputValue}
+            inputValueToSet={inputValue}
           />
+          <AddButton handleAddTodo={handleAddTodo} />
         </div>
         <div>
-          <button onClick={clear} className="m-1 text-white bg-purple-300 p-3 rounded hover:text-green-300">
-              <FilterIcon/>
-            </button>
-          <button onClick={sortItems} className="m-3 text-white bg-purple-300 p-2.5 rounded hover:text-green-300">
-              <SortIcon/>
+          <button
+            onClick={clear}
+            className="m-1 text-white bg-purple-300 p-3 rounded hover:text-green-300"
+          >
+            <FilterIcon />
+          </button>
+          <button
+            onClick={sortItems}
+            className="m-3 text-white bg-purple-300 p-2.5 rounded hover:text-green-300"
+          >
+            <SortIcon />
           </button>
 
           <div className={classFeatures}>Yay!! You are all done</div>
         </div>
         <FlipMove className="flip-wrapper my-1 ">
-
           {todoItems.map((item, index) => (
             <div key={item.text}>
               <TodoItem
