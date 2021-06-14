@@ -3,25 +3,32 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import EditButton from "./EditButton";
 
 const testId = "test-editbutton";
+
 const defaultProps = {
   "data-testid": testId,
 };
 const getComponent = (props = {}) =>
   render(<EditButton {...defaultProps} {...props} />);
 
-test("button renders", () => {
+test("Edit button renders", () => {
   getComponent();
-  const editbutton = screen.getByTestId(testId);
-  expect(editbutton).toBeInTheDocument();
+
+  const editButton = screen.getByTestId(testId);
+
+  expect(editButton).toBeInTheDocument();
 });
 
-test("callback fires on click", () => {
+test("callback fires on click of edit button", () => {
   const onClickEditMockFunction = jest.fn();
+
   getComponent({ onClick: onClickEditMockFunction });
-  const editbutton = screen.getByTestId(testId);
+
+  const editButton = screen.getByTestId(testId);
+
   expect(onClickEditMockFunction).not.toHaveBeenCalled();
 
-  fireEvent.click(editbutton);
+  fireEvent.click(editButton);
 
   expect(onClickEditMockFunction).toHaveBeenCalledTimes(1);
+  
 });

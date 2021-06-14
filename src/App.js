@@ -142,19 +142,6 @@ const App = () => {
     setTodoItems(temporaryList);
   };
 
-  /**
-   * Delete item from todo list
-   */
-  const deleteItem = (indexToDelete) => {
-    const tmpTodoList = [
-      ...todoItems.slice(0, indexToDelete),
-      ...todoItems.slice(indexToDelete + 1, todoItems.length),
-    ];
-    setTodoItems(tmpTodoList);
-  };
-
-  
-
   const classFeatures = classnames({
     hidden: !areYouDone(),
     visible: areYouDone(),
@@ -194,7 +181,7 @@ const App = () => {
           >
             <SortIcon />
           </button>
-
+          
           <div className={classFeatures}>Yay!! You are all done</div>
         </div>
         <FlipMove className="flip-wrapper my-1 ">

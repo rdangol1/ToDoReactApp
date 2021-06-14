@@ -11,14 +11,19 @@ const getComponent = (props = {}) =>
 
 test("button renders", () => {
   getComponent();
+
   const button = screen.getByTestId(testId);
+
   expect(button).toBeInTheDocument();
 });
 
 test("callback fires on click", () => {
   const onClickMockFunction = jest.fn();
+
   getComponent({ onClick: onClickMockFunction });
+
   const button = screen.getByTestId(testId);
+  
   expect(onClickMockFunction).not.toHaveBeenCalled();
 
   fireEvent.click(button);

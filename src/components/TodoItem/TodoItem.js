@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import classnames from "classnames";
 import PropTypes from "prop-types";
-import { DeleteIcon } from "../Icons";
 
 import EditButton from "../EditButton";
+import DeleteButton from "../DeleteButton";
 
 const TodoItem = ({
   id,
@@ -70,17 +70,16 @@ const TodoItem = ({
         
       </label>
       <br></br>
+
       <label className="text-gray-400 text-sm" htmlFor={id}>
         {createDate}
-        
       </label>
-      <button
-        onClick={onDelete}
-        className="text-red-600 float-right rounded-md p-0.5 "
-        {...props}
-      >
-        <DeleteIcon />
-      </button>
+
+      <DeleteButton
+      setUpInputValue = {setUpInputValue}
+      setUpTodoItems= {setUpTodoItems}
+      indexId ={value} />
+
       <EditButton 
       setUpInputValue = {setUpInputValue}
       setUpTodoItems= {setUpTodoItems}
