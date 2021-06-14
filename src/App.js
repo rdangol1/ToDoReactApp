@@ -153,14 +153,7 @@ const App = () => {
     setTodoItems(tmpTodoList);
   };
 
-  const editItem = (indexToEdit) => {
-    const tempList = [
-      ...todoItems.slice(0, indexToEdit),
-      ...todoItems.slice(indexToEdit + 1, todoItems.length),
-    ];
-    setInputValue(todoItems[indexToEdit].text);
-    setTodoItems(tempList);
-  };
+  
 
   const classFeatures = classnames({
     hidden: !areYouDone(),
@@ -170,6 +163,11 @@ const App = () => {
   const setUpInputValue = (inputTofill) => {
     setInputValue(inputTofill);
   };
+
+  const setUpTodoItems = (temporaryList) =>{
+    setTodoItems(temporaryList);
+  }
+ 
   return (
     <div className="contatiner py-20 mx-auto max-w-md">
       <div className="bg-white rounded-lg p-10 text-black shadow">
@@ -210,8 +208,11 @@ const App = () => {
                 defaultCompleted={item.done}
                 onToggle={() => checkboxToggled(index)}
                 onDelete={() => deleteItem(index)}
-                onEdit={() => editItem(index)}
                 createPriority={() => getItemPriority(index)}
+                setUpInputValue={ setUpInputValue}
+                setUpTodoItems ={setUpTodoItems}
+                listOfItems={todoItems}
+                
               />
             </div>
           ))}

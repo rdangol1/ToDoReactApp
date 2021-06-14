@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import classnames from "classnames";
+import PropTypes from "prop-types";
 import { DeleteIcon } from "../Icons";
-import { EditIcon } from "../Icons";
+
+import EditButton from "../EditButton";
 
 const TodoItem = ({
   id,
@@ -12,6 +14,13 @@ const TodoItem = ({
   onEdit,
   createPriority,
   createDate,
+  value,
+  setUpInputValue,
+  setUpTodoItems,
+  getTodoItems,
+  listOfItems,
+  ...props
+
 }) => {
   /**
    * This state is used to hold if the checkbox for the todo item
@@ -41,8 +50,8 @@ const TodoItem = ({
   });
 
   const classCharecter = classnames({
-    "border-b-2 p-2 bg-blue-100 m-1 rounded-md": createPriority(),
-    "border-b-2 p-2 bg-red-100 m-1 rounded-md": !createPriority(),
+    "border-b-2 p-2 bg-blue-100 m-1 rounded-md": createPriority,
+    "border-b-2 p-2 bg-red-100 m-1 rounded-md": !createPriority,
   });
 
   return (
@@ -54,28 +63,60 @@ const TodoItem = ({
         id={id}
         name={id}
         checked={isChecked}
+        {...props}
       />
       <label className={classname} htmlFor={id}>
         {label}
+        
       </label>
       <br></br>
       <label className="text-gray-400 text-sm" htmlFor={id}>
         {createDate}
+        
       </label>
       <button
         onClick={onDelete}
         className="text-red-600 float-right rounded-md p-0.5 "
+        {...props}
       >
         <DeleteIcon />
       </button>
-      <button
-        onClick={onEdit}
-        className="text-red-600 float-right mr-3 rounded-md p-0.5"
-      >
-        <EditIcon />
-      </button>
+      <EditButton 
+      setUpInputValue = {setUpInputValue}
+      setUpTodoItems= {setUpTodoItems}
+      indexId ={value}
+      listOfItems ={listOfItems}/>
     </div>
+    
   );
+};
+
+TodoItem.propTypes = {
+  id: PropTypes.string,
+};
+TodoItem.propTypes = {
+  label: PropTypes.string,
+};
+TodoItem.propTypes = {
+  onToggle: PropTypes.func,
+};
+TodoItem.propTypes = {
+  onDelete: PropTypes.func,
+};
+TodoItem.propTypes = {
+  onEdit: PropTypes.func,
+};
+TodoItem.propTypes = {
+  createPriority: PropTypes.func,
+};
+TodoItem.propTypes = {
+  createDate: PropTypes.func,
+};
+TodoItem.propTypes = {
+  defaultCompleted: PropTypes.bool,
+};
+TodoItem.propTypes = {
+  getTodoItems: PropTypes.func,
 };
 
 export default TodoItem;
