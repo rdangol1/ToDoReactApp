@@ -1,7 +1,8 @@
-import React,{ useState }  from "react";
+import React,{ useState, useRef, useEffect }  from "react";
 import classnames from "classnames";
 import PropTypes from "prop-types";
 
+import DateComponent from "../DateComponent";
 import CheckBox from "../CheckBox";
 import EditButton from "../EditButton";
 import DeleteButton from "../DeleteButton";
@@ -25,59 +26,44 @@ const TodoItem = ({
    */
   const [isChecked, setIsChecked] = useState(defaultCompleted);
 
+  //function to set the state of the checkbox
   const checkBoxToggleStatus =(toggle) =>{
     setIsChecked(toggle)
   }
- 
+  //function the set the color of the todo item
   const classCharecter = classnames({
     "border-b-2 p-2 bg-blue-100 m-1 rounded-md": createPriority,
     "border-b-2 p-2 bg-red-100 m-1 rounded-md": !createPriority,
   });
 
-  /**
-   * Classnames to conditionally be applied to the `label`
-   */
-  const classname = classnames({
-    "text-gray-600": !isChecked, // If checkbox is not checked
-    "line-through": isChecked, // If checkbox is checked
-    "text-gray-300": isChecked, // If checkbox is checked
-});
-
   return (
     <div className={classCharecter}>
       <CheckBox
-      id ={id} 
+      id={id} 
       defaultCompleted={defaultCompleted}
-      setUpTodoItems= {setUpTodoItems}
-      indexId ={value}
-      listOfItems ={listOfItems}
-      Checked={isChecked}
-      checkBoxToggleStatus={checkBoxToggleStatus}/>
-
-      <label 
-      className={classname} 
-      htmlFor={id}
-      {...props}>
-          {label}
-      </label>
-
-      <br></br>
-
+      setUpTodoItems={setUpTodoItems}
+      indexId={value}
+      listOfItems={listOfItems}
+      checked={isChecked}
+      onToggle={checkBoxToggleStatus}
+      label={label}
+     />
       <label className="text-gray-400 text-sm" htmlFor={id}
       {...props}>
-        {createDate}
+      <DateComponent date={createDate}/>
       </label>
 
       <DeleteButton
       setUpInputValue = {setUpInputValue}
       setUpTodoItems= {setUpTodoItems}
+      listOfItems={listOfItems}
       indexId ={value} />
 
       <EditButton 
-      setUpInputValue = {setUpInputValue}
-      setUpTodoItems= {setUpTodoItems}
-      indexId ={value}
-      listOfItems ={listOfItems}/>
+      setUpInputValue={setUpInputValue}
+      setUpTodoItems={setUpTodoItems}
+      indexId={value}
+      listOfItems={listOfItems}/>
     </div>
     
   );
@@ -85,23 +71,11 @@ const TodoItem = ({
 
 TodoItem.propTypes = {
   id: PropTypes.string,
-};
-TodoItem.propTypes = {
   label: PropTypes.string,
-};
-
-TodoItem.propTypes = {
   onClick: PropTypes.func,
-};
-TodoItem.propTypes = {
   createPriority: PropTypes.func,
-};
-TodoItem.propTypes = {
   createDate: PropTypes.func,
-};
-TodoItem.propTypes = {
   defaultCompleted: PropTypes.bool,
 };
-
 
 export default TodoItem;

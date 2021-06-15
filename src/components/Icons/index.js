@@ -1,3 +1,3 @@
-import { SortIcon, DeleteIcon, EditIcon, FilterIcon } from "./Icons";
+import { SortIconDes,SortIconAsc, DeleteIcon, EditIcon, FilterIcon } from "./Icons";
 
-export { SortIcon, DeleteIcon, EditIcon, FilterIcon };
+export { SortIconDes, SortIconAsc, DeleteIcon, EditIcon, FilterIcon };

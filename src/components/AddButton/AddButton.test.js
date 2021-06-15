@@ -9,6 +9,7 @@ const defaultProps = {
 const getComponent = (props = {}) =>
   render(<AddButton {...defaultProps} {...props} />);
 
+
 test("button renders", () => {
   getComponent();
 

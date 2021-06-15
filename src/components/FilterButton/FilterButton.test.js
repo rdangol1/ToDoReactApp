@@ -5,6 +5,8 @@ import FilterButton from "./FilterButton";
 const testId = "test-filterbutton";
 const defaultProps = {
   "data-testid": testId,
+  listOfItems: [["lemon", false, "2021-06-15 20:21:47",],
+                ["toy", true, "2021-06-15 20:21:49",]],
 };
 const getComponent = (props = {}) =>
   render(<FilterButton {...defaultProps} {...props} />);
@@ -17,16 +19,16 @@ test("sortbutton renders", () => {
   expect(FilterButton).toBeInTheDocument();
 });
 
-test("callback fires on click of sort button", () => {
+test("callback fires on click of filter button", () => {
   const onClickFilterButtonMockFunction = jest.fn();
 
-  getComponent({ onClick: onClickFilterButtonMockFunction });
+  getComponent({ setUpTodoItems: onClickFilterButtonMockFunction });
 
   const FilterButton = screen.getByTestId(testId);
   
   expect(onClickFilterButtonMockFunction).not.toHaveBeenCalled();
 
   fireEvent.click(FilterButton);
-
-  expect(onClickFilterButtonMockFunction).toHaveBeenCalledTimes(1);
+  const tempList = defaultProps.listOfItems.filter((items) => items.done === false)
+  expect(onClickFilterButtonMockFunction).toHaveBeenCalledWith(tempList);
 });

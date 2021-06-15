@@ -16,7 +16,7 @@ const DeleteButton =({setUpInputValue, setUpTodoItems, indexId, listOfItems, ...
 
     return(
         <button
-        onClick={ () => onDelete(indexId)}
+        onClick={() => onDelete(indexId)}
         className="text-red-600 float-right rounded-md p-0.5 "
         {...props}>
             <DeleteIcon />
@@ -25,14 +25,8 @@ const DeleteButton =({setUpInputValue, setUpTodoItems, indexId, listOfItems, ...
 }
 DeleteButton.propTypes = {
     setUpInputValue: PropTypes.func,
-};
-DeleteButton.propTypes = {
     setUpTodoItems: PropTypes.func,
-};
-DeleteButton.propTypes = {
     indexId: PropTypes.number,
-};
-DeleteButton.propTypes = {
     listOfItems: PropTypes.array,
 };
 

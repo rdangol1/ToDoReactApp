@@ -7,6 +7,7 @@ const testId = "test-deletebutton";
 
 const defaultProps = {
   "data-testid": testId,
+  listOfItems: []
 };
 const getComponent = (props = {}) =>
   render(<DeleteButton {...defaultProps} {...props} />);
@@ -22,7 +23,7 @@ test("Delete button renders", () => {
 test("callback fires on click of delete button", () => {
   const onClickDeleteMockFunction = jest.fn();
 
-  getComponent({ onClick: onClickDeleteMockFunction });
+  getComponent({ setUpTodoItems: onClickDeleteMockFunction });
 
   const DeleteButton = screen.getByTestId(testId);
 
@@ -30,6 +31,6 @@ test("callback fires on click of delete button", () => {
 
   fireEvent.click(DeleteButton);
 
-  expect(onClickDeleteMockFunction).toHaveBeenCalledTimes(1);
+  expect(onClickDeleteMockFunction).toHaveBeenCalledWith([]);
   
 });

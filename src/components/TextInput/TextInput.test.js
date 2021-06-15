@@ -34,13 +34,13 @@ test("callback fires on change", () => {
 test("callback fires on key up", () => {
     const onKeyUpMockFunction = jest.fn();
 
-    getComponent({ onKeyUp: onKeyUpMockFunction });
+    getComponent({ onSubmit: onKeyUpMockFunction });
 
     const keyUp = screen.getByTestId(testId);
 
     expect(onKeyUpMockFunction).not.toHaveBeenCalled();
 
-    fireEvent.keyUp(keyUp, {key:'Enter', code:13});
+    fireEvent.keyUp(keyUp, { keyCode: 13 });
 
     expect(onKeyUpMockFunction).toHaveBeenCalledTimes(1);
 });

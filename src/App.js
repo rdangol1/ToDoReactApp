@@ -8,20 +8,14 @@ import TextInput from "./components/TextInput";
 import AddButton from "./components/AddButton";
 import SortButton from "./components/SortButton";
 import FilterButton from "./components/FilterButton";
+import DateComponent from "./components/DateComponent";
 
-/**
- * Components to componinitize
- * - Save todo button
- * - Text input
- */
+
 const App = () => {
-  /**
-   * This sets up the todo state and sets the default todos
-   * NOTE: Anything inside of the ()'s of `useState` will be
-   * the default value for that piece of state, in this case
-   * referring to `todoItems`
-   */
+  // sets the value that the user input into the input text field
   const [inputValue, setInputValue] = useState("");
+
+  // use to update the list and its components 
   const [todoItems, setTodoItems] = useState([]);
 
   const handleAddTodo = () => {
@@ -34,7 +28,7 @@ const App = () => {
     const temporaryTodoItem = {
       text: inputValue,
       done: false,
-      createDate: getEntireDate(),
+      createDate: new Date(),
     };
     // Add the temporary todo item to the existing list of todos
     setTodoItems([...todoItems, temporaryTodoItem]);
@@ -43,26 +37,7 @@ const App = () => {
     setUpInputValue("");
   };
 
-  const getEntireDate = () => {
-    var today = new Date();
-    const ItemDate = JSON.parse(
-      JSON.stringify(
-        today.getFullYear() +
-          "-" +
-          (today.getMonth() + 1) +
-          "-" +
-          today.getDate() +
-          " " +
-          today.getHours() +
-          ":" +
-          today.getMinutes() +
-          ":" +
-          today.getSeconds()
-      )
-    );
-    return ItemDate;
-  };
-
+  // use it to retrieve that entire list from local storage 
   useEffect(() => {
     const data = localStorage.getItem("todo");
 
@@ -71,12 +46,17 @@ const App = () => {
     }
   }, []);
 
+
+    // use it to store that entire list from local storage 
   useEffect(() => {
     localStorage.setItem("todo", JSON.stringify(todoItems));
   });
 
- 
-
+  
+  /**
+   * checks to see if at any point if the user has completed all todo
+   * it reveals a hidden message once the user is done with all todos
+   */
   const areYouDone = () => {
     const tempList = todoItems.filter((items) => items.done === true);
 
@@ -86,7 +66,11 @@ const App = () => {
     return false;
   };
 
-
+  /**
+   * checks the the date that the todo item was created
+   * if the time created is pastr 3 mins it ramps up 
+   * the priority of the item and turns the component red
+   */
 
   const getItemPriority = (indexToCheck) => {
     const today = new Date();
@@ -102,17 +86,17 @@ const App = () => {
     return true;
   };
 
-
-
-  const classFeatures = classnames({
+  // adds the property to a class based oon booleans
+  const classFeatures=classnames({
     hidden: !areYouDone(),
     visible: areYouDone(),
   });
 
+  //function to set the input value
   const setUpInputValue = (inputTofill) => {
     setInputValue(inputTofill);
   };
-
+  //function to set the list value
   const setUpTodoItems = (temporaryList) =>{
     setTodoItems(temporaryList);
   }
@@ -144,7 +128,7 @@ const App = () => {
         </div>
         <FlipMove className="flip-wrapper my-1 ">
           {todoItems.map((item, index) => (
-            <div key={item.text}>
+            <div key={item.createDate}>
               <TodoItem
                 id={index}
                 value={index}
@@ -155,7 +139,6 @@ const App = () => {
                 setUpInputValue={ setUpInputValue}
                 setUpTodoItems ={setUpTodoItems}
                 listOfItems={todoItems}
-                
               />
             </div>
           ))}

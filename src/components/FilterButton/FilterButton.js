@@ -14,7 +14,7 @@ const FilterButton =({ setUpTodoItems, listOfItems, ...props})=>{
     return(
         <button
         onClick={onClear}
-        className="m-1 text-white bg-purple-300 p-3 rounded hover:text-green-300"
+        className="m-1 text-white bg-purple-300 p-2.5 rounded hover:text-green-300"
         {...props}>
             <FilterIcon />
         </button>
@@ -22,11 +22,7 @@ const FilterButton =({ setUpTodoItems, listOfItems, ...props})=>{
 }
 FilterButton.propTypes = {
     listOfItems: PropTypes.array,
-};
-FilterButton.propTypes = {
     setUpTodoItems: PropTypes.func,
-};
-FilterButton.propTypes = {
     onClear: PropTypes.func,
 };
 export default FilterButton;

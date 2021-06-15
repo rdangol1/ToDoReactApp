@@ -2,7 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { EditIcon } from "../Icons";
 
-const EditButton =({setUpInputValue, setUpTodoItems, indexId, listOfItems, ...props})=>{    /**
+const EditButton =({setUpInputValue, setUpTodoItems, indexId, listOfItems, ...props})=>{    
+    /**
     * Edits item from todo list an puts the todo text back into the input field
     */
     const onEdit = (indexToEdit) => {
@@ -18,7 +19,7 @@ const EditButton =({setUpInputValue, setUpTodoItems, indexId, listOfItems, ...pr
     };
     return(
         <button
-        onClick={ () => onEdit(indexId)}
+        onClick= {()=> onEdit(indexId)}
         className="text-red-600 float-right mr-3 rounded-md p-0.5"
         {...props}>
             <EditIcon />
@@ -27,15 +28,11 @@ const EditButton =({setUpInputValue, setUpTodoItems, indexId, listOfItems, ...pr
 }
 EditButton.propTypes = {
     setUpInputValue: PropTypes.func,
-};
-EditButton.propTypes = {
     setUpTodoItems: PropTypes.func,
-};
-EditButton.propTypes = {
     indexId: PropTypes.number,
-};
-EditButton.propTypes = {
     listOfItems: PropTypes.array,
+    onEdit: PropTypes.func,
+    indexToEdit:PropTypes.number
 };
   
 export default EditButton;
