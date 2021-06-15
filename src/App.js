@@ -6,8 +6,8 @@ import FlipMove from "react-flip-move";
 import TodoItem from "./components/TodoItem";
 import TextInput from "./components/TextInput";
 import AddButton from "./components/AddButton";
-import { SortIcon } from "./components/Icons";
-import { FilterIcon } from "./components/Icons";
+import SortButton from "./components/SortButton";
+import FilterButton from "./components/FilterButton";
 
 /**
  * Components to componinitize
@@ -23,6 +23,7 @@ const App = () => {
    */
   const [inputValue, setInputValue] = useState("");
   const [todoItems, setTodoItems] = useState([]);
+
   const handleAddTodo = () => {
     // Check if input is empty; if it is, skip the rest of the function
     if (inputValue === "") {
@@ -41,6 +42,7 @@ const App = () => {
     // Clear the input
     setUpInputValue("");
   };
+
   const getEntireDate = () => {
     var today = new Date();
     const ItemDate = JSON.parse(
@@ -73,14 +75,7 @@ const App = () => {
     localStorage.setItem("todo", JSON.stringify(todoItems));
   });
 
-  const checkboxToggled = (indexToToggle) => {
-    // TODO: use something like the index to set the `checked` state true or false
-    const temporaryList = [...todoItems];
-    let tempItem = { ...temporaryList[indexToToggle] };
-    tempItem.done = !tempItem.done;
-    temporaryList[indexToToggle] = tempItem;
-    setTodoItems(temporaryList);
-  };
+ 
 
   const areYouDone = () => {
     const tempList = todoItems.filter((items) => items.done === true);
@@ -91,10 +86,7 @@ const App = () => {
     return false;
   };
 
-  const clear = () => {
-    const tempList = todoItems.filter((items) => items.done === false);
-    setTodoItems(tempList);
-  };
+
 
   const getItemPriority = (indexToCheck) => {
     const today = new Date();
@@ -110,37 +102,7 @@ const App = () => {
     return true;
   };
 
-  const sortItems = () => {
-    const temporaryList = [...todoItems];
-    for (let i = 0; i < todoItems.length; i++) {
-      const convertTodate = new Date(temporaryList[i].createDate);
-      temporaryList[i].createDate = convertTodate;
-    }
-    temporaryList.sort((a, b) => (a.createDate < b.createDate ? 1 : -1));
-    setTodoItems(temporaryList);
 
-    for (let i = 0; i < todoItems.length; i++) {
-      const convertTodate = temporaryList[i].createDate;
-      const ItemDate = JSON.parse(
-        JSON.stringify(
-          convertTodate.getFullYear() +
-            "-" +
-            (convertTodate.getMonth() + 1) +
-            "-" +
-            convertTodate.getDate() +
-            " " +
-            convertTodate.getHours() +
-            ":" +
-            convertTodate.getMinutes() +
-            ":" +
-            convertTodate.getSeconds()
-        )
-      );
-
-      temporaryList[i].createDate = ItemDate;
-    }
-    setTodoItems(temporaryList);
-  };
 
   const classFeatures = classnames({
     hidden: !areYouDone(),
@@ -168,19 +130,15 @@ const App = () => {
           />
           <AddButton onClick={handleAddTodo} />
         </div>
+
         <div>
-          <button
-            onClick={clear}
-            className="m-1 text-white bg-purple-300 p-3 rounded hover:text-green-300"
-          >
-            <FilterIcon />
-          </button>
-          <button
-            onClick={sortItems}
-            className="m-3 text-white bg-purple-300 p-2.5 rounded hover:text-green-300"
-          >
-            <SortIcon />
-          </button>
+          <FilterButton 
+          setUpTodoItems= {setUpTodoItems}
+          listOfItems={todoItems}/>
+
+          <SortButton
+          setUpTodoItems= {setUpTodoItems}
+          listOfItems={todoItems}/> 
           
           <div className={classFeatures}>Yay!! You are all done</div>
         </div>
@@ -193,8 +151,6 @@ const App = () => {
                 label={item.text}
                 createDate={item.createDate}
                 defaultCompleted={item.done}
-                onToggle={() => checkboxToggled(index)}
-                onDelete={() => deleteItem(index)}
                 createPriority={() => getItemPriority(index)}
                 setUpInputValue={ setUpInputValue}
                 setUpTodoItems ={setUpTodoItems}

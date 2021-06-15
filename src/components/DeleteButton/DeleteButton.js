@@ -11,7 +11,7 @@ const DeleteButton =({setUpInputValue, setUpTodoItems, indexId, listOfItems, ...
           ...listOfItems.slice(0, indexToDelete),
           ...listOfItems.slice(indexToDelete + 1, listOfItems.length),
         ];
-        setTodoItems(tmpTodoList);
+        setUpTodoItems(tmpTodoList);
       };
 
     return(
