@@ -8,7 +8,7 @@ const SortButton =({ setUpTodoItems, listOfItems, ...props})=>{
   //use to toggle between ascending and descending sort button
   const [SortButtonState, setSortButton] = useState(false);
     /**
-     * Sorting the list in descending order based on the date.
+     * Sorting the list in descending/ascending order based on the date.
      */
     const onSort = () => {
       const temporaryList = [...listOfItems];
@@ -25,10 +25,17 @@ const SortButton =({ setUpTodoItems, listOfItems, ...props})=>{
 
       setSortButton(!SortButtonState);
     };
+     /**
+     * Sorting the list in ascending order
+     */
+   
     const onSortAsc = (temporaryList) => {
       temporaryList.sort((a, b) => (a.createDate > b.createDate ? 1 : -1));
       setUpTodoItems(temporaryList);
     };
+     /**
+     * Sorting the list in descending order
+     */
     const onSortDes = (temporaryList) => {
       temporaryList.sort((a, b) => (a.createDate < b.createDate ? 1 : -1));
       setUpTodoItems(temporaryList);

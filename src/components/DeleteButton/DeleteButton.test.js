@@ -12,7 +12,7 @@ const defaultProps = {
 const getComponent = (props = {}) =>
   render(<DeleteButton {...defaultProps} {...props} />);
 
-test("Delete button renders", () => {
+test("delete button renders", () => {
   getComponent();
 
   const deleteButton = screen.getByTestId(testId);

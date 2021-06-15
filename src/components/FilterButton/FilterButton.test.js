@@ -11,7 +11,7 @@ const defaultProps = {
 const getComponent = (props = {}) =>
   render(<FilterButton {...defaultProps} {...props} />);
 
-test("sortbutton renders", () => {
+test(" filter button renders", () => {
   getComponent();
 
   const FilterButton = screen.getByTestId(testId);

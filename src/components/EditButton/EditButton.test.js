@@ -13,7 +13,7 @@ const defaultProps = {
 const getComponent = (props = {}) =>
   render(<EditButton {...defaultProps} {...props} />);
 
-test("Edit button renders", () => {
+test("edit button renders", () => {
   getComponent();
 
   const editButton = screen.getByTestId(testId);

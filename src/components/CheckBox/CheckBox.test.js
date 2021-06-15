@@ -18,7 +18,7 @@ test("check box renders", () => {
   expect(CheckBox).toBeInTheDocument();
 });
 
-test(" renders on click onToggle ", () => {
+test(" renders on click ontoggle ", () => {
     const onClickMockFunction = jest.fn();
   
     getComponent({ onToggle: onClickMockFunction });
@@ -29,7 +29,7 @@ test(" renders on click onToggle ", () => {
     expect(onClickMockFunction).toHaveBeenCalledTimes(1);
 });
 
-test("cheking the state of the checkbox", () => {
+test("checking the state of the checkbox", () => {
     const onClickMockFunction = jest.fn();
 
     getComponent({ onToggle: onClickMockFunction, checked: true });

@@ -6,7 +6,6 @@ const TextInput = ({ onSubmit, onChange, value, ...props }) => {
    * If the user presses enter it prevent the deafualt course 
    * of events and cretes a new toto item
    */
-
   const handleKeyUp = (event) => {
     if (event.keyCode === 13) {
       event.preventDefault();

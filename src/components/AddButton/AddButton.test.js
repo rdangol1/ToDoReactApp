@@ -10,7 +10,7 @@ const getComponent = (props = {}) =>
   render(<AddButton {...defaultProps} {...props} />);
 
 
-test("button renders", () => {
+test(" add button renders", () => {
   getComponent();
 
   const button = screen.getByTestId(testId);
@@ -18,7 +18,7 @@ test("button renders", () => {
   expect(button).toBeInTheDocument();
 });
 
-test("callback fires on click", () => {
+test("callback fires on click of add button", () => {
   const onClickMockFunction = jest.fn();
 
   getComponent({ onClick: onClickMockFunction });
