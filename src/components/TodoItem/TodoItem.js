@@ -32,8 +32,8 @@ const TodoItem = ({
   }
   //function the set the color of the todo item
   const classCharecter = classnames({
-    "border-b-2 p-2 bg-blue-100 m-1 rounded-md": createPriority,
-    "border-b-2 p-2 bg-red-100 m-1 rounded-md": !createPriority,
+    "border-b-2 p-2 bg-blue-100 m-1 rounded-md": createPriority(),
+    "border-b-2 p-2 bg-red-100 m-1 rounded-md": !createPriority(),
   });
 
   return (
@@ -50,7 +50,7 @@ const TodoItem = ({
      />
       <label className="text-gray-400 text-sm" htmlFor={id}
       {...props}>
-      <DateComponent date={createDate}/>
+      <DateComponent date={createDate} />
       </label>
 
       <DeleteButton
