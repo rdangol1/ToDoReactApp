@@ -1,34 +1,29 @@
-import React, { useState, useEffect } from "react";
-import classnames from "classnames";
-import FlipMove from "react-flip-move";
+import React, { useState, useEffect } from 'react';
+import FlipMove from 'react-flip-move';
 
 // Our components
-import TodoItem from "./components/TodoItem";
-import TextInput from "./components/TextInput";
-import AddButton from "./components/AddButton";
-import SortButton from "./components/SortButton";
-import FilterButton from "./components/FilterButton";
+import TodoItem from './components/TodoItem';
+import TextInput from './components/TextInput';
+import AddButton from './components/AddButton';
+import SortButton from './components/SortButton';
+import FilterButton from './components/FilterButton';
 
-
+// Contexts
+import TodoContextProvider from './context/TodoContext';
 
 const App = () => {
   // sets the value that the user input into the input text field
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
 
-  // use to update the list and its components 
+  // use to update the list and its components
   const [todoItems, setTodoItems] = useState([]);
 
-// used to update the edit button state
-  const[editState, setEditstate] = useState(false);
-
-   //function to set the input value
-  const setUpEditstate = (inputTofill) => {
-    setEditstate(inputTofill);
-  };
+  //use to toggle between ascending and descending sort button
+  const [sortButtonState, setSortButton] = useState(false);
 
   const handleAddTodo = () => {
     // Check if input is empty; if it is, skip the rest of the function
-    if (inputValue === "") {
+    if (inputValue === '') {
       return;
     }
 
@@ -39,57 +34,34 @@ const App = () => {
       createDate: new Date(),
     };
 
-    // if(editState == true ){
-    //   const indextoEdit = (indextoreturn) =>{
-    //     setUpEditstate(!editState);
-    //     const indextoreturn = indextoEdit();
-    //     console.log(indextoreturn);
-        
-    //     const temporaryList =[...todoItems]
-        
-    //     let tempItemOld ={...temporaryList[indextoreturn]}
-    //     temporaryTodoItem.text = tempItemOld.text;
-    //     temporaryTodoItem.done = tempItemOld.done;
-    //     temporaryTodoItem.createDate = tempItemOld.createDate;
-    //     setTodoItems([...todoItems, temporaryTodoItem]);
-    //   }
-     
-    // }
-    // else{
-      // Add the temporary todo item to the existing list of todos
     setTodoItems([...todoItems, temporaryTodoItem]);
-    //}
 
     // Clear the input
-    setUpInputValue("");
-     
-    
-  }
-  
-  // use it to retrieve that entire list from local storage 
+    setInputValue('');
+  };
+
+  // use it to retrieve that entire list from local storage
   useEffect(() => {
-    const data = localStorage.getItem("todo");
+    const data = localStorage.getItem('todo');
 
     if (data) {
       setTodoItems(JSON.parse(data));
     }
   }, []);
 
-
-    // use it to store that entire list from local storage 
+  // use it to store that entire list from local storage
   useEffect(() => {
-    localStorage.setItem("todo", JSON.stringify(todoItems));
-  });
+    localStorage.setItem('todo', JSON.stringify(todoItems));
+  }, [todoItems]);
 
-  
   /**
    * checks to see if at any point if the user has completed all todo
    * it reveals a hidden message once the user is done with all todos
    */
-  const areYouDone = () => {
-    const tempList = todoItems.filter((items) => items.done === true);
+  const areTodosDone = () => {
+    const doneTodos = todoItems.filter((items) => items.done === true);
 
-    if (tempList.length === todoItems.length || !todoItems.length) {
+    if (doneTodos.length === todoItems.length || !todoItems.length) {
       return true;
     }
     return false;
@@ -97,87 +69,113 @@ const App = () => {
 
   /**
    * checks the the date that the todo item was created
-   * if the time created is pastr 3 mins it ramps up 
+   * if the time created is past 3 mins it ramps up
    * the priority of the item and turns the component red
    */
-
   const getItemPriority = (indexToCheck) => {
     const today = new Date();
-    const event = today.setMinutes(today.getMinutes() - 3);
-
+    const priorityThreshold = today.setMinutes(today.getMinutes() - 3);
     const itemDate = todoItems[indexToCheck].createDate;
+    const itemTimestamp = new Date(itemDate).getTime();
 
-    const itemDates = new Date(itemDate).getTime();
-
-    if (itemDates < event) {
+    if (itemTimestamp < priorityThreshold) {
       return false;
     }
     return true;
   };
 
-  // adds the property to a class based oon booleans
-  const classFeatures=classnames({
-    hidden: !areYouDone(),
-    "visible p-3 text-lg text-gray-500 font-bold": areYouDone(),
-  });
-
-  //function to set the input value
-  const setUpInputValue = (inputTofill) => {
-    setInputValue(inputTofill);
+  /**
+   * Filters the list based on the items yet to complete and clears out completed tasks.
+   */
+  const filterItems = () => {
+    setTodoItems(todoItems.filter((items) => items.done === false));
   };
-  //function to set the list value
-  const setUpTodoItems = (temporaryList) =>{
-    setTodoItems(temporaryList);
-  }
- 
-  return (
-    <div className="contatiner py-20 mx-auto max-w-md">
-      <div className="bg-white rounded-lg p-10 text-black shadow">
-        <div class="bg-local p-6 rounded text-black" style={{backgroundImage: `url(/images/background.jpeg)`, position:"sticky" }}>
-          <legend  class="bg-local py-4 rounded text-white text-2xl font-bold">To-do List</legend>
-          <div className="my-4 flex">
-          <TextInput
-            onSubmit={handleAddTodo}
-            onChange={setUpInputValue}
-            value={inputValue}
-          />
-          <AddButton onClick={handleAddTodo} />
-        </div>
-        </div>
-        <div>
-          <FilterButton 
-          setUpTodoItems= {setUpTodoItems}
-          listOfItems={todoItems}/>
 
-          <SortButton
-          setUpTodoItems= {setUpTodoItems}
-          listOfItems={todoItems}/> 
-          
-          
-          <div className={classFeatures}>You are all done!!</div>
-        </div>
-        <FlipMove className="flip-wrapper my-1 ">
-          {todoItems.map((item, index) => (
-            <div key={item.createDate}>
-              <TodoItem
-                id={index}
-                value={index}
-                label={item.text}
-                createDate={item.createDate}
-                defaultCompleted={item.done}
-                createPriority={() => getItemPriority(index)}
-                setUpInputValue={ setUpInputValue}
-                setUpTodoItems ={setUpTodoItems}
-                listOfItems={todoItems}
-                setUpEditstate={setUpEditstate}
-                editState={editState}
-                // indextoEdit={indextoEdit}
+  /**
+   * Sorting the list in descending/ascending order based on the date.
+   */
+  const sortItems = () => {
+    const temporaryList = [...todoItems];
+    for (let i = 0; i < todoItems.length; i++) {
+      const convertTodate = new Date(temporaryList[i].createDate);
+      temporaryList[i].createDate = convertTodate;
+    }
+
+    if (!sortButtonState) {
+      onSortAsc(temporaryList);
+    } else {
+      onSortDes(temporaryList);
+    }
+
+    setSortButton(!sortButtonState);
+  };
+
+  /**
+   * Sorting the list in ascending order
+   */
+  const onSortAsc = (temporaryList) => {
+    temporaryList.sort((a, b) => (a.createDate > b.createDate ? 1 : -1));
+    setTodoItems(temporaryList);
+  };
+
+  /**
+   * Sorting the list in descending order
+   */
+  const onSortDes = (temporaryList) => {
+    temporaryList.sort((a, b) => (a.createDate < b.createDate ? 1 : -1));
+    setTodoItems(temporaryList);
+  };
+
+  return (
+    <TodoContextProvider>
+      <div className="contatiner py-20 mx-auto max-w-md">
+        <div className="bg-white rounded-lg p-10 text-black shadow">
+          <div
+            class="bg-local p-6 rounded text-black"
+            style={{
+              backgroundImage: 'url(/images/background.jpeg)',
+              position: 'sticky',
+            }}
+          >
+            <legend class="bg-local py-4 rounded text-white text-2xl font-bold">
+              To-do List
+            </legend>
+            <div className="my-4 flex">
+              <TextInput
+                onSubmit={handleAddTodo}
+                onChange={setInputValue}
+                value={inputValue}
               />
+              <AddButton onClick={handleAddTodo} />
             </div>
-          ))}
-        </FlipMove>
+          </div>
+          <div>
+            <FilterButton onClick={filterItems} />
+
+            <SortButton onClick={sortItems} sortDesOrder={sortButtonState} />
+
+            {areTodosDone() && (
+              <div className="visible p-3 text-lg text-gray-500 font-bold">
+                You are all done!!
+              </div>
+            )}
+          </div>
+          <FlipMove className="flip-wrapper my-1 ">
+            {todoItems.map((item, index) => (
+              <div key={item.createDate}>
+                <TodoItem
+                  item={item}
+                  createPriority={() => getItemPriority(index)}
+                  setUpInputValue={setInputValue}
+                  setUpTodoItems={setTodoItems}
+                  listOfItems={todoItems}
+                />
+              </div>
+            ))}
+          </FlipMove>
+        </div>
       </div>
-    </div>
+    </TodoContextProvider>
   );
 };
 
