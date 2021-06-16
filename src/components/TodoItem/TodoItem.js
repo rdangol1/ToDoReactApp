@@ -69,7 +69,7 @@ const TodoItem = ({
       listOfItems={listOfItems}
       setUpEditstate={setUpEditstate}
       editState={editState}
-      indextoEdit={indextoEdit}/>
+     />
     </div>
     
   );

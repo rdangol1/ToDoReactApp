@@ -39,32 +39,32 @@ const App = () => {
       createDate: new Date(),
     };
 
-    if(!editState){
-      const indextoreturn = indextoEdit();
-      
-      const temporaryList =[...todoItems]
-      
-      let tempItemOld ={...temporaryList[indextoreturn]}
-      temporaryTodoItem.text = tempItemOld.text;
-      temporaryTodoItem.done = tempItemOld.done;
-      temporaryTodoItem.createDate = tempItemOld.createDate;
+    // if(editState == true ){
+    //   const indextoEdit = (indextoreturn) =>{
+    //     setUpEditstate(!editState);
+    //     const indextoreturn = indextoEdit();
+    //     console.log(indextoreturn);
+        
+    //     const temporaryList =[...todoItems]
+        
+    //     let tempItemOld ={...temporaryList[indextoreturn]}
+    //     temporaryTodoItem.text = tempItemOld.text;
+    //     temporaryTodoItem.done = tempItemOld.done;
+    //     temporaryTodoItem.createDate = tempItemOld.createDate;
+    //     setTodoItems([...todoItems, temporaryTodoItem]);
+    //   }
      
-      setTodoItems([...todoItems, temporaryTodoItem]);
-    }
-    else{
+    // }
+    // else{
       // Add the temporary todo item to the existing list of todos
-      setTodoItems([...todoItems, temporaryTodoItem]);
-    }
+    setTodoItems([...todoItems, temporaryTodoItem]);
+    //}
 
     // Clear the input
     setUpInputValue("");
      
     
   }
-  const indextoEdit = (indextoreturn) =>{
-    return indextoreturn;
-  }
- 
   
   // use it to retrieve that entire list from local storage 
   useEffect(() => {
@@ -171,7 +171,7 @@ const App = () => {
                 listOfItems={todoItems}
                 setUpEditstate={setUpEditstate}
                 editState={editState}
-                indextoEdit={indextoEdit}
+                // indextoEdit={indextoEdit}
               />
             </div>
           ))}

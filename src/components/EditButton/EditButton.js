@@ -8,7 +8,7 @@ const EditButton =({setUpInputValue, setUpTodoItems, indexId, listOfItems,setUpE
     */
     const onEdit = (indexToEdit) => {
 
-        setUpEditstate(!editState);
+        //setUpEditstate(!editState);
         
         setUpInputValue(listOfItems[indexToEdit].text);
 
@@ -18,7 +18,7 @@ const EditButton =({setUpInputValue, setUpTodoItems, indexId, listOfItems,setUpE
         ];
         setUpTodoItems(tempList);
         
-        indextoEdit(indexId);
+        //indextoEdit(indexId);
         
     };
     return(
