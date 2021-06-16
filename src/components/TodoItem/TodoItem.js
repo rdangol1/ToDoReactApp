@@ -17,6 +17,9 @@ const TodoItem = ({
   setUpInputValue,
   setUpTodoItems,
   listOfItems,
+  setUpEditstate,
+  editState,
+  indextoEdit,
   ...props
 }) => {
 
@@ -32,8 +35,8 @@ const TodoItem = ({
   }
   //function the set the color of the todo item
   const classCharecter = classnames({
-    "border-b-2 p-2 bg-blue-100 m-1 rounded-md": createPriority(),
-    "border-b-2 p-2 bg-red-100 m-1 rounded-md": !createPriority(),
+    "border-b-2 p-2 bg-gradient-to-r from-white via-blue-100 to-blue-200 m-1 rounded-md": createPriority(),
+    "border-b-2 p-2 bg-gradient-to-r from-white via-red-100 to-red-200 m-1 rounded-md": !createPriority(),
   });
 
   return (
@@ -63,7 +66,10 @@ const TodoItem = ({
       setUpInputValue={setUpInputValue}
       setUpTodoItems={setUpTodoItems}
       indexId={value}
-      listOfItems={listOfItems}/>
+      listOfItems={listOfItems}
+      setUpEditstate={setUpEditstate}
+      editState={editState}
+      indextoEdit={indextoEdit}/>
     </div>
     
   );
@@ -76,6 +82,7 @@ TodoItem.propTypes = {
   createPriority: PropTypes.func,
   createDate: PropTypes.func,
   defaultCompleted: PropTypes.bool,
+  setUpEditstate: PropTypes.func,
 };
 
 export default TodoItem;

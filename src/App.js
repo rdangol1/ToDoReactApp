@@ -18,6 +18,14 @@ const App = () => {
   // use to update the list and its components 
   const [todoItems, setTodoItems] = useState([]);
 
+// used to update the edit button state
+  const[editState, setEditstate] = useState(false);
+
+   //function to set the input value
+  const setUpEditstate = (inputTofill) => {
+    setEditstate(inputTofill);
+  };
+
   const handleAddTodo = () => {
     // Check if input is empty; if it is, skip the rest of the function
     if (inputValue === "") {
@@ -30,13 +38,31 @@ const App = () => {
       done: false,
       createDate: new Date(),
     };
+
     // Add the temporary todo item to the existing list of todos
     setTodoItems([...todoItems, temporaryTodoItem]);
 
     // Clear the input
     setUpInputValue("");
-  };
-
+     
+    if(!editState){
+      const indextoreturn = indextoEdit();
+      const indextoEdit = todoItems.length;
+      const temporaryList =[...todoItems]
+      let tempItemNew ={...temporaryList[indextoEdit]}
+      let tempItemOld ={...temporaryList[indextoreturn]}
+      tempItemNew.text = tempItemOld.text;
+      tempItemNew.done = tempItemOld.done;
+      tempItemNew.createDate = tempItemOld.createDate;
+      temporaryList[indextoEdit] =tempItemNew;
+      setUpTodoItems(temporaryList);
+    }
+  }
+  const indextoEdit = (indextoreturn) =>{
+    return indextoreturn;
+  }
+ 
+  
   // use it to retrieve that entire list from local storage 
   useEffect(() => {
     const data = localStorage.getItem("todo");
@@ -89,7 +115,7 @@ const App = () => {
   // adds the property to a class based oon booleans
   const classFeatures=classnames({
     hidden: !areYouDone(),
-    "visible p-3 text-lg text-gray-700 BlinkMacSystemFont": areYouDone(),
+    "visible p-3 text-lg text-gray-500 font-bold": areYouDone(),
   });
 
   //function to set the input value
@@ -105,7 +131,7 @@ const App = () => {
     <div className="contatiner py-20 mx-auto max-w-md">
       <div className="bg-white rounded-lg p-10 text-black shadow">
         <div class="bg-local p-6 rounded text-black" style={{backgroundImage: `url(/images/background.jpeg)`, position:"sticky" }}>
-          <legend  class="bg-local p-6 rounded text-white">To-do List</legend>
+          <legend  class="bg-local py-4 rounded text-white text-2xl font-bold">To-do List</legend>
           <div className="my-4 flex">
           <TextInput
             onSubmit={handleAddTodo}
@@ -140,6 +166,9 @@ const App = () => {
                 setUpInputValue={ setUpInputValue}
                 setUpTodoItems ={setUpTodoItems}
                 listOfItems={todoItems}
+                setUpEditstate={setUpEditstate}
+                editState={editState}
+                indextoEdit={indextoEdit}
               />
             </div>
           ))}

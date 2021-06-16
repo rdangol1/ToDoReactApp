@@ -15,7 +15,7 @@ const TextInput = ({ onSubmit, onChange, value, ...props }) => {
   return (
     <input
       type="text"
-      className="p-2 border-b-2 rounded-t mr-2 flex-1"
+      className="p-2 border-b-4 rounded-t mr-2 flex-1"
       onChange={(event) => onChange(event.target.value)}
       onKeyUp={handleKeyUp}
       value={value}

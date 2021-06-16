@@ -25,8 +25,8 @@ const CheckBox = ({defaultCompleted, setUpTodoItems, id, listOfItems, indexId, l
      * Classnames to conditionally be applied to the `label`
      */
     const classname = classnames({
-        "text-gray-600": !checked, // If checkbox is not checked
-        "line-through": checked, // If checkbox is checked
+        "text-gray-600 font-normal": !checked, // If checkbox is not checked
+        "line-through font-normal": checked, // If checkbox is checked
         "text-gray-300": checked, // If checkbox is checked
     });
     

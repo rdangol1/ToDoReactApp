@@ -44,7 +44,7 @@ const SortButton =({ setUpTodoItems, listOfItems, ...props})=>{
     return(
         <button
           onClick={onSort }
-          className="m-3 text-white bg-purple-300 p-2.5 rounded hover:text-green-300"
+          className="m-3 text-white bg-red-400 p-2.5 rounded hover:text-gray-300"
           {...props}>
            {SortButtonState ?  <SortIconDes /> : <SortIconAsc /> }
         </button>
