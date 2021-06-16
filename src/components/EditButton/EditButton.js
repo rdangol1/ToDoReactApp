@@ -14,7 +14,6 @@ const EditButton =({setUpInputValue, setUpTodoItems, indexId, listOfItems, ...pr
         ];
 
         setUpInputValue(listOfItems[indexToEdit].text);
-        
         setUpTodoItems(tempList);
     };
     return(

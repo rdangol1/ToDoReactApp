@@ -89,7 +89,7 @@ const App = () => {
   // adds the property to a class based oon booleans
   const classFeatures=classnames({
     hidden: !areYouDone(),
-    visible: areYouDone(),
+    "visible p-3 text-lg text-gray-700 BlinkMacSystemFont": areYouDone(),
   });
 
   //function to set the input value
@@ -104,9 +104,9 @@ const App = () => {
   return (
     <div className="contatiner py-20 mx-auto max-w-md">
       <div className="bg-white rounded-lg p-10 text-black shadow">
-        <legend>Todo List</legend>
-
-        <div className="my-4 flex">
+        <div class="bg-local p-6 rounded text-black" style={{backgroundImage: `url(/images/background.jpeg)`, position:"sticky" }}>
+          <legend  class="bg-local p-6 rounded text-white">To-do List</legend>
+          <div className="my-4 flex">
           <TextInput
             onSubmit={handleAddTodo}
             onChange={setUpInputValue}
@@ -114,7 +114,7 @@ const App = () => {
           />
           <AddButton onClick={handleAddTodo} />
         </div>
-
+        </div>
         <div>
           <FilterButton 
           setUpTodoItems= {setUpTodoItems}
@@ -124,7 +124,8 @@ const App = () => {
           setUpTodoItems= {setUpTodoItems}
           listOfItems={todoItems}/> 
           
-          <div className={classFeatures}>Yay!! You are all done</div>
+          
+          <div className={classFeatures}>You are all done!!</div>
         </div>
         <FlipMove className="flip-wrapper my-1 ">
           {todoItems.map((item, index) => (

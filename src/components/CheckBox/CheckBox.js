@@ -34,7 +34,7 @@ const CheckBox = ({defaultCompleted, setUpTodoItems, id, listOfItems, indexId, l
         <div>
             <input
                 onChange={handleOnChange}
-                className="mr-5"
+                className="mr-5 checked:border -transparent"
                 type="checkbox"
                 id={id}
                 name={id}
