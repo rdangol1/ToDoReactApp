@@ -39,24 +39,27 @@ const App = () => {
       createDate: new Date(),
     };
 
-    // Add the temporary todo item to the existing list of todos
-    setTodoItems([...todoItems, temporaryTodoItem]);
+    if(!editState){
+      const indextoreturn = indextoEdit();
+      
+      const temporaryList =[...todoItems]
+      
+      let tempItemOld ={...temporaryList[indextoreturn]}
+      temporaryTodoItem.text = tempItemOld.text;
+      temporaryTodoItem.done = tempItemOld.done;
+      temporaryTodoItem.createDate = tempItemOld.createDate;
+     
+      setTodoItems([...todoItems, temporaryTodoItem]);
+    }
+    else{
+      // Add the temporary todo item to the existing list of todos
+      setTodoItems([...todoItems, temporaryTodoItem]);
+    }
 
     // Clear the input
     setUpInputValue("");
      
-    if(!editState){
-      const indextoreturn = indextoEdit();
-      const indextoEdit = todoItems.length;
-      const temporaryList =[...todoItems]
-      let tempItemNew ={...temporaryList[indextoEdit]}
-      let tempItemOld ={...temporaryList[indextoreturn]}
-      tempItemNew.text = tempItemOld.text;
-      tempItemNew.done = tempItemOld.done;
-      tempItemNew.createDate = tempItemOld.createDate;
-      temporaryList[indextoEdit] =tempItemNew;
-      setUpTodoItems(temporaryList);
-    }
+    
   }
   const indextoEdit = (indextoreturn) =>{
     return indextoreturn;
