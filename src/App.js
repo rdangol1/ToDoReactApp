@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import FlipMove from 'react-flip-move';
+import React, { useState, useEffect, useContext } from 'react';
+import FlipMove from 'react-flip-move'; 
 
 // Our components
 import TodoItem from './components/TodoItem';
@@ -8,15 +8,13 @@ import AddButton from './components/AddButton';
 import SortButton from './components/SortButton';
 import FilterButton from './components/FilterButton';
 
+
 // Contexts
-import TodoContextProvider from './context/TodoContext';
+import { TodoContext } from './context/TodoContext';
 
 const App = () => {
-  // sets the value that the user input into the input text field
-  const [inputValue, setInputValue] = useState('');
-
-  // use to update the list and its components
-  const [todoItems, setTodoItems] = useState([]);
+  //using components from from provider
+  const { todoItems, setTodoItems,inputValue,setInputValue } = useContext(TodoContext);
 
   //use to toggle between ascending and descending sort button
   const [sortButtonState, setSortButton] = useState(false);
@@ -126,56 +124,57 @@ const App = () => {
     setTodoItems(temporaryList);
   };
 
+  
+
   return (
-    <TodoContextProvider>
-      <div className="contatiner py-20 mx-auto max-w-md">
-        <div className="bg-white rounded-lg p-10 text-black shadow">
-          <div
-            class="bg-local p-6 rounded text-black"
-            style={{
-              backgroundImage: 'url(/images/background.jpeg)',
-              position: 'sticky',
-            }}
-          >
-            <legend class="bg-local py-4 rounded text-white text-2xl font-bold">
-              To-do List
-            </legend>
-            <div className="my-4 flex">
-              <TextInput
-                onSubmit={handleAddTodo}
-                onChange={setInputValue}
-                value={inputValue}
-              />
-              <AddButton onClick={handleAddTodo} />
-            </div>
+    <div className="contatiner py-20 mx-auto max-w-md">
+      <div className="bg-white rounded-lg p-10 text-black shadow">
+        <div
+          class="bg-local p-6 rounded text-black"
+          style={{
+            backgroundImage: 'url(/images/background.jpeg)',
+            position: 'sticky',
+          }}
+        >
+          <legend class="bg-local py-4 rounded text-white text-2xl font-bold">
+            To-do List
+          </legend>
+          <div className="my-4 flex">
+            <TextInput
+              onSubmit={handleAddTodo}
+              onChange={setInputValue}
+              value={inputValue}
+            />
+            <AddButton onClick={handleAddTodo} />
           </div>
-          <div>
-            <FilterButton onClick={filterItems} />
-
-            <SortButton onClick={sortItems} sortDesOrder={sortButtonState} />
-
-            {areTodosDone() && (
-              <div className="visible p-3 text-lg text-gray-500 font-bold">
-                You are all done!!
-              </div>
-            )}
-          </div>
-          <FlipMove className="flip-wrapper my-1 ">
-            {todoItems.map((item, index) => (
-              <div key={item.createDate}>
-                <TodoItem
-                  item={item}
-                  createPriority={() => getItemPriority(index)}
-                  setUpInputValue={setInputValue}
-                  setUpTodoItems={setTodoItems}
-                  listOfItems={todoItems}
-                />
-              </div>
-            ))}
-          </FlipMove>
         </div>
+        <div>
+          <FilterButton onClick={filterItems} />
+
+          <SortButton onClick={sortItems} sortDesOrder={sortButtonState} />
+
+          {areTodosDone() && (
+            <div className="visible p-3 text-lg text-gray-500 font-bold">
+              You are all done!!
+            </div>
+          )}
+        </div>
+        <FlipMove className="flip-wrapper my-1 ">
+          {todoItems.map((item, index) => (
+            <div key={item.createDate}>
+              <TodoItem
+                item={item}
+                id={index}
+                createPriority={() => getItemPriority(index)}
+                setUpInputValue={setInputValue}
+                setUpTodoItems={setTodoItems}
+                listOfItems={todoItems}
+              />
+            </div>
+          ))}
+        </FlipMove>
       </div>
-    </TodoContextProvider>
+    </div>
   );
 };
 

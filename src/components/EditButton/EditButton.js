@@ -1,48 +1,78 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { EditIcon } from '../Icons';
+import classnames from 'classnames';
+import { TodoContext } from '../../context/TodoContext';
 
 const EditButton = ({
-    setUpInputValue,
-    setUpTodoItems,
     indexId,
-    listOfItems,
-    indextoEdit,
     ...props
 }) => {
+
     /**
      * Edits item from todo list an puts the todo text back into the input field
      */
-    const onEdit = (indexToEdit) => {
-        //setUpEditstate(!editState);
+    
+    const {todoItems, setTodoItems} = useContext(TodoContext);
 
-        setUpInputValue(listOfItems[indexToEdit].text);
+    // sets the value that the user input into the input text field
+    const[editToggle, setEditToggle] = useState(false);
 
-        const tempList = [
-            ...listOfItems.slice(0, indexToEdit),
-            ...listOfItems.slice(indexToEdit + 1, listOfItems.length),
-        ];
-        setUpTodoItems(tempList);
+     // sets the value that the user input into the input text field
+    const [editInputValue, setEditInputValue] = useState('');
+    
+    const inputvisibility = classnames({
+        hidden: !editToggle, 
+        visible: editToggle,
+    });
 
-        //indextoEdit(indexId);
-    };
+    const onClick = () =>{
+        setEditToggle(!editToggle);
+        setEditInputValue(todoItems[indexId].text);
+    }
+
+    const pressKeyUp = (event) => {
+        if (event.keyCode === 13) {
+            const templist =[...todoItems];
+           
+            let tempItem = {...templist[indexId]}
+            
+            tempItem.text = editInputValue;
+            
+            templist[indexId] =tempItem;
+
+            setTodoItems(templist);
+            
+            setEditInputValue('')
+            
+            setEditToggle(!editToggle);
+        }
+    }
     return (
-        <button
-            onClick={() => onEdit(indexId)}
-            className="text-red-600 float-right mr-3 rounded-md p-0.5"
-            {...props}
-        >
-            <EditIcon />
-        </button>
+        <div>
+            <button
+                onClick={onClick}
+                className="text-red-600 float-right mr-3 rounded-md p-0.5"
+                {...props}
+            >
+                <EditIcon />
+            </button>
+            <br>
+            </br>
+            <input
+                type="text"
+                className= {inputvisibility}
+                onChange={(event) => setEditInputValue(event.target.value)}
+                onKeyUp={pressKeyUp}
+                value={editInputValue}
+            />
+        </div>
     );
 };
 EditButton.propTypes = {
-    setUpInputValue: PropTypes.func,
-    setUpTodoItems: PropTypes.func,
+    
     indexId: PropTypes.number,
-    listOfItems: PropTypes.array,
-    onEdit: PropTypes.func,
-    indexToEdit: PropTypes.number,
+
 };
 
 export default EditButton;

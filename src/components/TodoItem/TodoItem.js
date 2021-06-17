@@ -14,9 +14,10 @@ const TodoItem = ({
   setUpTodoItems,
   listOfItems,
   indextoEdit,
+  id,
   ...props
 }) => {
-  const { value, done, text, createDate } = item;
+  const { done, text, createDate } = item;
 
   /**
    * This state is used to hold if the checkbox for the todo item
@@ -39,34 +40,29 @@ const TodoItem = ({
   return (
     <div className={classCharecter}>
       <CheckBox
-        id={value}
+        id={id}
         defaultCompleted={done}
-        setUpTodoItems={setUpTodoItems}
-        indexId={value}
-        listOfItems={listOfItems}
+        indexId={id}
         checked={isChecked}
         onToggle={checkBoxToggleStatus}
         label={text}
       />
-      <label className="text-gray-400 text-sm" htmlFor={value} {...props}>
+      <label className="text-gray-400 text-sm" htmlFor={id} {...props}>
         <DateComponent date={createDate} />
       </label>
-
+      <div>
       <DeleteButton
-        setUpInputValue={setUpInputValue}
-        setUpTodoItems={setUpTodoItems}
-        listOfItems={listOfItems}
-        indexId={value}
+        indexId={id}
       />
 
       <EditButton
-        setUpInputValue={setUpInputValue}
-        setUpTodoItems={setUpTodoItems}
-        indexId={value}
-        listOfItems={listOfItems}
+        indexId={id}
       />
+
+      </div>
+      
     </div>
-  );
+   );
 };
 
 TodoItem.propTypes = {
@@ -76,7 +72,7 @@ TodoItem.propTypes = {
   createPriority: PropTypes.func,
   createDate: PropTypes.func,
   defaultCompleted: PropTypes.bool,
-  setUpEditstate: PropTypes.func,
+  
 };
 
 export default TodoItem;

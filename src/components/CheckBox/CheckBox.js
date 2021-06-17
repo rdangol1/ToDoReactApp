@@ -1,8 +1,13 @@
-import React from "react"
+import React,{useContext} from "react"
 import classnames from "classnames";
 import PropTypes from "prop-types";
 
-const CheckBox = ({defaultCompleted, setUpTodoItems, id, listOfItems, indexId, label, onToggle, checked, "data-testid": testId, ...props}) =>{
+import { TodoContext } from '../../context/TodoContext';
+
+
+const CheckBox = ({defaultCompleted,  id,  indexId, label, onToggle, checked, "data-testid": testId, ...props}) =>{
+
+    const{ todoItems, setTodoItems} = useContext(TodoContext);
 
     /**
      * This function is fired when the checkbox for the todo item
@@ -10,12 +15,16 @@ const CheckBox = ({defaultCompleted, setUpTodoItems, id, listOfItems, indexId, l
      */
     const handleOnChange = () => {
         // Call `onToggle` function
+        
         // TODO: use something like the index to set the `checked` state true or false
-        const temporaryList = [...listOfItems];
+        
+        
+
+        const temporaryList = [...todoItems];
         let tempItem = { ...temporaryList[indexId] };
         tempItem.done = !tempItem.done;
         temporaryList[indexId] = tempItem;
-        setUpTodoItems(temporaryList);
+        setTodoItems(temporaryList);
 
         // Make checked state opposite its value and update the state
         onToggle(!checked);
