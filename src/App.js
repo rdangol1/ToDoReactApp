@@ -86,7 +86,9 @@ const App = () => {
    * Filters the list based on the items yet to complete and clears out completed tasks.
    */
   const filterItems = () => {
-    setTodoItems(todoItems.filter((items) => items.done === false));
+   
+    const templist = todoItems.filter((items) => items.done === false);
+    return templist;
   };
 
   /**
