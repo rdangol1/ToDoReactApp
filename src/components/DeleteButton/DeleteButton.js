@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { DeleteIcon } from '../Icons';
-import { TodoContext} from '../../context/TodoContext';
+import { TodoContext } from '../../context/TodoContext';
 
 const DeleteButton = ({indexId, ...props
 }) => {
-  const { deleteItem } = useContext(TodoContext);
+  const { deleteItem } = React.useContext(TodoContext);
 
   /**
    * Delete item from todo list
@@ -21,9 +21,7 @@ const DeleteButton = ({indexId, ...props
   );
 };
 DeleteButton.propTypes = {
-  
-  indexId: PropTypes.number,
- 
+  indexId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default DeleteButton;

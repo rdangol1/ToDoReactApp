@@ -9,7 +9,7 @@ import DeleteButton from '../DeleteButton';
 
 const TodoItem = ({
   item,
-  createPriority = () => {},
+  createPriority,
   setUpInputValue,
   setUpTodoItems,
   listOfItems,
@@ -25,10 +25,6 @@ const TodoItem = ({
    */
   const [isChecked, setIsChecked] = useState(done);
 
-  //function to set the state of the checkbox
-  const checkBoxToggleStatus = (toggle) => {
-    setIsChecked(toggle);
-  };
   //function the set the color of the todo item
   const classCharecter = classnames({
     'border-b-2 p-2 bg-gradient-to-r from-white via-blue-100 to-blue-200 m-1 rounded-md':
@@ -44,7 +40,7 @@ const TodoItem = ({
         defaultCompleted={done}
         indexId={id}
         checked={isChecked}
-        onToggle={checkBoxToggleStatus}
+        onToggle={setIsChecked}
         label={text}
       />
       <label className="text-gray-400 text-sm" htmlFor={id} {...props}>
